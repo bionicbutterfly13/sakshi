@@ -8,6 +8,13 @@ in adapters outside this package.
 
 from __future__ import annotations
 
+from sakshi.goals.explainer import (
+    AnomalyExplainer,
+    AnomalyExplanation,
+    BasinProfile,
+    find_most_shifted_key,
+)
+from sakshi.goals.generator import GoalGenerator, severity_to_priority
 from sakshi.goals.graph import (
     DEFAULT_PARENT_COUPLING,
     MAX_COUPLING_BASINS,
@@ -15,6 +22,8 @@ from sakshi.goals.graph import (
     GoalGraph,
     GoalNode,
 )
+from sakshi.goals.monitor import GoalMonitor, GoalMonitorResult
+from sakshi.goals.outcome_closure import GoalOutcomeClosureService
 from sakshi.goals.outcome_memory import GoalOutcomeMemory
 from sakshi.goals.selector import GoalSelector, ModSelectionCriteria
 from sakshi.goals.transformer import GoalTransformer, TransformType
@@ -29,8 +38,15 @@ __all__ = [
     "MAX_COUPLING_BASINS",
     "DomainRegistry",
     "GoalEdge",
+    "AnomalyExplainer",
+    "AnomalyExplanation",
+    "BasinProfile",
     "GoalGraph",
+    "GoalGenerator",
     "GoalNode",
+    "GoalMonitor",
+    "GoalMonitorResult",
+    "GoalOutcomeClosureService",
     "GoalOutcomeMemory",
     "GoalSelector",
     "GoalTransformer",
@@ -38,4 +54,6 @@ __all__ = [
     "GoalValidator",
     "ModSelectionCriteria",
     "TransformType",
+    "find_most_shifted_key",
+    "severity_to_priority",
 ]

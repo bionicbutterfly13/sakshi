@@ -20,6 +20,11 @@ from sakshi.models.cycle import (
     PhaseResult,
     PriorType,
 )
+from sakshi.models.execution import (
+    ActionExecutionResult,
+    ActionExecutionStatus,
+    GoalExecutionSummary,
+)
 from sakshi.models.expectation import (
     CognitiveExpectation,
     ExpectationSeverity,
@@ -38,6 +43,8 @@ __all__ = [
     "ESCALATION_THRESHOLDS",
     "AnomalyEscalation",
     "AnomalyType",
+    "ActionExecutionResult",
+    "ActionExecutionStatus",
     "BlackboardKey",
     "BlackboardSnapshot",
     "CognitiveExpectation",
@@ -48,6 +55,7 @@ __all__ = [
     "ExpectationSeverity",
     "ExpectationViolation",
     "Goal",
+    "GoalExecutionSummary",
     "GoalOutcomeRecord",
     "GoalPlan",
     "GoalPredicate",
