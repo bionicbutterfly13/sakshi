@@ -18,8 +18,8 @@ Status labels:
 | `interpret/` | A | A-distance, ambiguity, anomaly persistence, and expectation evaluator ported; package-local tests cover key behavior. |
 | `goals/` | A | Goal graph, selector, validator, transformer, generator, monitor, explainer, outcome closure, and outcome memory ported with package-native DTOs and injected seams. |
 | `plans/` | A | Plan soundness and deviation tracker ported; learning-signal adjustment is host-wired through a public callback, not an EventBus singleton. |
-| `meta/` | Pending | Metacognitive controller not yet ported. |
-| `intake/` | Pending | Instruction ingest not yet ported. |
+| `meta/` | B | Package-native monitor/assess/control loop ported with injected graph, generator, EventBus, and WriteGuard seams. Host-only particle lifecycle and LinOSS/AIS dispatch remain adapter-side. |
+| `intake/` | A | Instruction ingest ported with graph insertion, lineage metadata, validation, and deduplication; legacy goal-service sync remains adapter-side. |
 | `world/` | A | World simulator ported; package-local tests cover action scaling and discrepancy detection. |
 | Public docs | B | Initial README, contribution notes, architecture, principles, and quality docs exist; quickstart still pending. |
 | Tests | B | Package-local smoke tests cover DTOs, foundations, and world/expectation cluster; fuller behavioral tests still pending. |
