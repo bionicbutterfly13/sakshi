@@ -93,6 +93,13 @@ class NoOpBasinHook:
         return None
 
 
+class NoOpEventBus:
+    """Default `EventBus` that drops emitted events."""
+
+    async def emit(self, event_type: str, payload: Mapping[str, Any]) -> None:
+        return None
+
+
 class AlwaysPermitWriteGuard:
     """Default `WriteGuard` that permits every write.
 
@@ -111,5 +118,6 @@ __all__ = [
     "EventBus",
     "GoalStateStore",
     "NoOpBasinHook",
+    "NoOpEventBus",
     "WriteGuard",
 ]
