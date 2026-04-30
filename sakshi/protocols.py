@@ -8,8 +8,9 @@ LLM SDK.
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from datetime import datetime
-from typing import TYPE_CHECKING, Any, Mapping, Protocol, runtime_checkable
+from typing import TYPE_CHECKING, Any, Protocol, runtime_checkable
 
 if TYPE_CHECKING:
     from sakshi.models.goal import GoalOutcomeRecord
@@ -46,9 +47,11 @@ class GoalStateStore(Protocol):
     this protocol. Sakshi never imports a specific persistence layer.
     """
 
-    async def fetch_world_state(self, query: Mapping[str, Any]) -> "WorldStateSnapshot": ...
+    async def fetch_world_state(
+        self, query: Mapping[str, Any]
+    ) -> WorldStateSnapshot: ...
 
-    async def record_goal_outcome(self, record: "GoalOutcomeRecord") -> None: ...
+    async def record_goal_outcome(self, record: GoalOutcomeRecord) -> None: ...
 
 
 @runtime_checkable

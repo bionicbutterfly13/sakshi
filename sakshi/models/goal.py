@@ -6,14 +6,14 @@ status, plans, and outcome records.
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
-from enum import Enum
+from datetime import UTC, datetime
+from enum import StrEnum
 from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
 
-class GoalStatus(str, Enum):
+class GoalStatus(StrEnum):
     """Goal lifecycle status."""
 
     ACTIVE = "active"
@@ -93,9 +93,7 @@ class GoalOutcomeRecord(BaseModel):
     failed_count: int = 0
     deferred_count: int = 0
     plan_steps: list[str] = Field(default_factory=list)
-    recorded_at: datetime = Field(
-        default_factory=lambda: datetime.now(timezone.utc)
-    )
+    recorded_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
 
 __all__ = [

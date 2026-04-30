@@ -5,13 +5,13 @@ Typed keys and snapshot model for the inter-phase cognitive blackboard.
 
 from __future__ import annotations
 
-from enum import Enum
+from enum import StrEnum
 from typing import Any
 
 from pydantic import BaseModel, Field
 
 
-class BlackboardKey(str, Enum):
+class BlackboardKey(StrEnum):
     """Typed keys for the cognitive blackboard.
 
     - STATES: current world state (from PERCEIVE)

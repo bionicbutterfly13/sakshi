@@ -6,14 +6,14 @@ snapshots, complete cycle traces, and metacognitive control actions.
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
-from enum import Enum
+from datetime import UTC, datetime
+from enum import StrEnum
 from typing import Any
 
 from pydantic import BaseModel, Field, field_validator
 
 
-class OODAPhase(str, Enum):
+class OODAPhase(StrEnum):
     """OODA loop phases that cognitive cycle phases map onto."""
 
     OBSERVE = "OBSERVE"
@@ -22,7 +22,7 @@ class OODAPhase(str, Enum):
     ACT = "ACT"
 
 
-class NPState(str, Enum):
+class NPState(StrEnum):
     """Neuronal Packet lifecycle states (Kavi et al. 2408.15982 §3.1)."""
 
     UNMANIFESTED = "Unmanifested"
@@ -32,7 +32,7 @@ class NPState(str, Enum):
     DISSIPATED = "Dissipated"
 
 
-class PriorType(str, Enum):
+class PriorType(StrEnum):
     """Evolutionary prior taxonomy (Kavi et al. 2408.15982 §2.3).
 
     B (Basal): universal across species, survival/threat. Longer baseline.
@@ -47,14 +47,14 @@ class PriorType(str, Enum):
     LEARNED = "λ"
 
 
-class AnomalyType(str, Enum):
+class AnomalyType(StrEnum):
     """Anomaly classification for goal-driven autonomy."""
 
     BASIN_SHIFT = "BASIN_SHIFT"
     CANALIZATION_DETECTED = "CANALIZATION_DETECTED"
 
 
-class ControlActionType(str, Enum):
+class ControlActionType(StrEnum):
     """Types of metacognitive control actions emitted by the meta-loop."""
 
     STRENGTHEN_MODULE = "STRENGTHEN_MODULE"
@@ -78,9 +78,7 @@ class PhaseResult(BaseModel):
     phase_name: str
     ooda_phase: OODAPhase
     output: dict[str, Any] = Field(default_factory=dict)
-    recorded_at: datetime = Field(
-        default_factory=lambda: datetime.now(timezone.utc)
-    )
+    recorded_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
 
 class NPStateSnapshot(BaseModel):
@@ -92,17 +90,10 @@ class NPStateSnapshot(BaseModel):
 
     dominant_thoughtseed_id: str
     np_state: str = Field(
-        description=(
-            "NP lifecycle state: "
-            "Inactive | Activated | Dominant | Dissipated"
-        )
+        description=("NP lifecycle state: Inactive | Activated | Dominant | Dissipated")
     )
-    prior_type: str = Field(
-        description="Evolutionary prior: B | L | D | λ"
-    )
-    captured_at: datetime = Field(
-        default_factory=lambda: datetime.now(timezone.utc)
-    )
+    prior_type: str = Field(description="Evolutionary prior: B | L | D | λ")
+    captured_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
     @field_validator("np_state")
     @classmethod
@@ -123,9 +114,7 @@ class NPStateSnapshot(BaseModel):
     def validate_prior_type(cls, v: str) -> str:
         valid = {"B", "L", "D", "λ"}
         if v not in valid:
-            raise ValueError(
-                f"prior_type must be one of {valid}, got {v!r}"
-            )
+            raise ValueError(f"prior_type must be one of {valid}, got {v!r}")
         return v
 
 
@@ -136,9 +125,7 @@ class CycleTrace(BaseModel):
     phase_results: list[PhaseResult] = Field(default_factory=list)
     np_state_at_intend: NPStateSnapshot | None = None
     achieved_goals: list[str] = Field(default_factory=list)
-    started_at: datetime = Field(
-        default_factory=lambda: datetime.now(timezone.utc)
-    )
+    started_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
     finalized_at: datetime | None = None
 
     def get_phase_output(self, phase_name: str) -> dict[str, Any] | None:
@@ -163,9 +150,7 @@ class ControlAction(BaseModel):
     magnitude: float = 1.0
     rationale: str = ""
     precision_delta: float | None = None
-    created_at: datetime = Field(
-        default_factory=lambda: datetime.now(timezone.utc)
-    )
+    created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
 
 __all__ = [

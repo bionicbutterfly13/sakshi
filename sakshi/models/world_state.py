@@ -19,7 +19,7 @@ class WorldStateSnapshot(BaseModel):
     instance).
 
     Example:
-        ``WorldStateSnapshot(facts={"ON": {"object": "blockA", "surface": "table"}, "CLEAR": {}})``
+        ``WorldStateSnapshot(facts={"CLEAR": {}})``
     """
 
     facts: dict[str, Any] = Field(default_factory=dict)

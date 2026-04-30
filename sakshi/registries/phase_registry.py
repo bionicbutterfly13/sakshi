@@ -12,9 +12,10 @@ empty so the package itself ships no host-specific names.
 from __future__ import annotations
 
 import logging
+from collections.abc import Awaitable, Callable
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
-from typing import Any, Awaitable, Callable
+from datetime import UTC, datetime
+from typing import Any
 
 from sakshi.errors import PhaseTransitionError
 from sakshi.models.cycle import (
@@ -108,8 +109,7 @@ class PhaseRegistry:
     ) -> None:
         self._event_bus = event_bus
         self._phases: dict[str, PhaseSlot] = (
-            phase_config if phase_config is not None
-            else dict(DEFAULT_PHASE_REGISTRY)
+            phase_config if phase_config is not None else dict(DEFAULT_PHASE_REGISTRY)
         )
         self._cycle_complete_event_type = cycle_complete_event_type
         self._current_trace: CycleTrace | None = None
@@ -144,9 +144,7 @@ class PhaseRegistry:
             services=slot.services,
         )
 
-    def on_cycle_complete(
-        self, callback: CycleCompleteCallback
-    ) -> None:
+    def on_cycle_complete(self, callback: CycleCompleteCallback) -> None:
         """Register a callback to fire when `finalize_cycle()` is called."""
         self._callbacks.append(callback)
 
@@ -159,7 +157,7 @@ class PhaseRegistry:
         self._active_cycle_id = cycle_id
         self._current_trace = CycleTrace(
             cycle_id=cycle_id,
-            started_at=datetime.now(timezone.utc),
+            started_at=datetime.now(UTC),
         )
         logger.debug("cycle started: %s", cycle_id)
 
@@ -177,8 +175,7 @@ class PhaseRegistry:
         """
         if self._current_trace is None:
             raise PhaseTransitionError(
-                "No active cycle. Call start_cycle() before "
-                "record_phase_output()."
+                "No active cycle. Call start_cycle() before record_phase_output()."
             )
 
         config = self.get_phase_config(phase_name)
@@ -213,7 +210,7 @@ class PhaseRegistry:
                 "No active cycle to finalize. Call start_cycle() first."
             )
 
-        self._current_trace.finalized_at = datetime.now(timezone.utc)
+        self._current_trace.finalized_at = datetime.now(UTC)
         trace = self._current_trace
         self._last_completed_trace = trace
         self._current_trace = None

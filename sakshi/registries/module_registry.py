@@ -11,7 +11,7 @@ from __future__ import annotations
 import logging
 from collections import defaultdict
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 logger = logging.getLogger(__name__)
@@ -68,15 +68,11 @@ class ModuleRegistry:
             priority,
         )
 
-    def get_modules_for_phase(
-        self, phase_name: str
-    ) -> list[RegisteredModule]:
+    def get_modules_for_phase(self, phase_name: str) -> list[RegisteredModule]:
         """Return all registered modules for a phase, sorted by priority."""
         return list(self._modules.get(phase_name, []))
 
-    def get_active_module(
-        self, phase_name: str
-    ) -> RegisteredModule | None:
+    def get_active_module(self, phase_name: str) -> RegisteredModule | None:
         """Return the currently active module for a phase.
 
         Returns the swap override if one exists; otherwise returns the
@@ -95,9 +91,7 @@ class ModuleRegistry:
 
         return modules[0]
 
-    def swap_module(
-        self, phase_name: str, target_module_name: str
-    ) -> bool:
+    def swap_module(self, phase_name: str, target_module_name: str) -> bool:
         """Swap the active module for a phase.
 
         Args:
@@ -121,8 +115,7 @@ class ModuleRegistry:
         )
         if target is None:
             logger.warning(
-                "ModuleRegistry: swap failed, module %s not found "
-                "for phase %s",
+                "ModuleRegistry: swap failed, module %s not found for phase %s",
                 target_module_name,
                 phase_name,
             )
@@ -135,7 +128,7 @@ class ModuleRegistry:
             {
                 "from": previous.name if previous else None,
                 "to": target_module_name,
-                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "timestamp": datetime.now(UTC).isoformat(),
             }
         )
 

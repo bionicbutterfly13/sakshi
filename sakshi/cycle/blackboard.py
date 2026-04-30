@@ -57,9 +57,7 @@ class CognitiveBlackboard:
         async with lock:
             return self._data.get(key)
 
-    async def get_or_default(
-        self, key: BlackboardKey, default: Any
-    ) -> Any:
+    async def get_or_default(self, key: BlackboardKey, default: Any) -> Any:
         """Return a value from the blackboard, or `default` if unset."""
         lock = self._get_lock(key)
         async with lock:

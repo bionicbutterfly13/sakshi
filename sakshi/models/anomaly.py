@@ -11,7 +11,6 @@ from typing import Literal
 
 from pydantic import BaseModel, Field
 
-
 EscalationLevel = Literal[
     "MONITOR",
     "WIDEN_PRECISION",
@@ -31,17 +30,13 @@ ESCALATION_THRESHOLDS: dict[str, int] = {
 class AnomalyEscalation(BaseModel):
     """Tracks anomaly persistence and escalation state for a goal."""
 
-    goal_id: str = Field(
-        ..., description="Goal experiencing repeated anomalies"
-    )
+    goal_id: str = Field(..., description="Goal experiencing repeated anomalies")
     anomaly_count: int = Field(
         ...,
         ge=0,
         description="Total anomaly occurrences for this goal",
     )
-    current_level: EscalationLevel = Field(
-        ..., description="Current escalation level"
-    )
+    current_level: EscalationLevel = Field(..., description="Current escalation level")
     threshold_breached: bool = Field(
         ...,
         description="Whether a new threshold was crossed this cycle",
@@ -56,7 +51,7 @@ class AnomalyEscalation(BaseModel):
         goal_id: str,
         anomaly_count: int,
         recommended_action: str = "",
-    ) -> "AnomalyEscalation":
+    ) -> AnomalyEscalation:
         """Determine escalation level from anomaly count.
 
         Args:

@@ -7,14 +7,14 @@ after PHASE; if Y does not hold, report a violation."
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
-from enum import Enum
+from datetime import UTC, datetime
+from enum import StrEnum
 from typing import Any
 
 from pydantic import BaseModel, Field
 
 
-class ExpectationSeverity(str, Enum):
+class ExpectationSeverity(StrEnum):
     """Severity level for expectation violations."""
 
     INFO = "info"
@@ -42,15 +42,11 @@ class CognitiveExpectation(BaseModel):
 
     pre_condition_key: str = Field(
         default="",
-        description=(
-            "Blackboard key or phase output field to check BEFORE the phase"
-        ),
+        description=("Blackboard key or phase output field to check BEFORE the phase"),
     )
     post_condition_key: str = Field(
         default="",
-        description=(
-            "Blackboard key or phase output field to check AFTER the phase"
-        ),
+        description=("Blackboard key or phase output field to check AFTER the phase"),
     )
 
     relationship: str = Field(
@@ -74,9 +70,7 @@ class ExpectationViolation(BaseModel):
     description: str
     pre_value: Any | None = None
     post_value: Any | None = None
-    detected_at: datetime = Field(
-        default_factory=lambda: datetime.now(timezone.utc)
-    )
+    detected_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
 
 __all__ = [
