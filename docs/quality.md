@@ -16,7 +16,7 @@ Status labels:
 | `cycle/` | A | Blackboard and cycle history ported; smoke-tested. |
 | `registries/` | A | Module and phase registries ported; smoke-tested. |
 | `interpret/` | A | A-distance, ambiguity, anomaly persistence, and expectation evaluator ported; package-local tests cover key behavior. |
-| `goals/` | Pending | Goal subsystem not yet ported. |
+| `goals/` | B | Pure goal-core modules ported: graph, selector, validator, transformer, and outcome memory. Runtime-boundary files remain deferred: generator, closure, monitor, explainer. |
 | `plans/` | Pending | Plan soundness and deviation not yet ported. |
 | `meta/` | Pending | Metacognitive controller not yet ported. |
 | `intake/` | Pending | Instruction ingest not yet ported. |
