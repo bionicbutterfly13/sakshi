@@ -17,7 +17,7 @@ Status labels:
 | `registries/` | A | Module and phase registries ported; smoke-tested. |
 | `interpret/` | A | A-distance, ambiguity, anomaly persistence, and expectation evaluator ported; package-local tests cover key behavior. |
 | `goals/` | A | Goal graph, selector, validator, transformer, generator, monitor, explainer, outcome closure, and outcome memory ported with package-native DTOs and injected seams. |
-| `plans/` | Pending | Plan soundness and deviation not yet ported. |
+| `plans/` | A | Plan soundness and deviation tracker ported; learning-signal adjustment is host-wired through a public callback, not an EventBus singleton. |
 | `meta/` | Pending | Metacognitive controller not yet ported. |
 | `intake/` | Pending | Instruction ingest not yet ported. |
 | `world/` | A | World simulator ported; package-local tests cover action scaling and discrepancy detection. |
