@@ -281,6 +281,10 @@ def find_most_shifted_key(
 def _event_data(event: Mapping[str, Any] | object) -> dict[str, Any]:
     if isinstance(event, Mapping):
         return dict(event)
+    if hasattr(event, "get_data_dict"):
+        data_dict = event.get_data_dict()
+        if isinstance(data_dict, Mapping):
+            return dict(data_dict)
     if hasattr(event, "model_dump"):
         return event.model_dump()  # type: ignore[no-any-return]
     data = getattr(event, "data", None)
