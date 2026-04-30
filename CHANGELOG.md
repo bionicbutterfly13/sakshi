@@ -12,4 +12,6 @@ releases may break public API in any minor version.
 - Public protocols: `EventBus`, `Clock`, `GoalStateStore`, `BasinHook`, `WriteGuard`.
 - Error hierarchy: `SakshiError` and named subclasses.
 - `SakshiConfig` skeleton.
-- Data-model namespace placeholder; concrete DTOs land in a follow-up commit.
+- Pydantic DTOs for goals, cycle traces, blackboard snapshots, expectations, anomalies, execution summaries, and world state.
+- Core runtime packages for cycle state, registries, world simulation, interpretation, goals, plans, metacognition, and instruction intake.
+- Agent-first repository contract: `AGENTS.md`, architecture/principles/quality docs, `Makefile`, and hygiene checks.

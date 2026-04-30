@@ -30,7 +30,30 @@ Around these protocols Sakshi assembles a generic six-phase cognitive cycle (PER
 
 ## Quickstart
 
-Coming in a later release. The public API is still being shaped.
+```python
+import asyncio
+
+from sakshi.registries import PhaseRegistry
+from sakshi.protocols import NoOpEventBus
+
+
+async def main() -> None:
+    registry = PhaseRegistry(event_bus=NoOpEventBus())
+
+    await registry.start_cycle("cycle-001")
+    await registry.record_phase_output("PERCEIVE", {"basins": ["attention"]})
+    await registry.record_phase_output("INTERPRET", {"confidence": 0.82})
+    trace = await registry.finalize_cycle()
+
+    print(trace.cycle_id)
+    print([phase.phase_name for phase in trace.phase_results])
+
+
+asyncio.run(main())
+```
+
+Hosts that need production side effects implement the small protocols in
+`sakshi.protocols` and pass those implementations into Sakshi runtime classes.
 
 ## Influences
 

@@ -2,24 +2,37 @@
 
 > Sakshi is a metacognitive runtime inspired in part by MIDCA's distinction between object-level cognition and metacognitive monitoring/control. It is not affiliated with MIDCA and is not a drop-in implementation of the MIDCA reference architecture.
 
-This document is a stub. Full provenance content lands in a later release of the project. Listed alphabetically; no implicit ranking by listing order.
+Listed alphabetically; no implicit ranking by listing order.
 
 ## Active Inference (Friston et al.)
 
-TODO. Foundation for Expected-Free-Energy-style arbitration in the meta-loop.
+Active Inference influenced Sakshi's use of expectation, surprise, and
+performance proxies during the ASSESS step. Sakshi does not implement a full
+active-inference stack; host applications may supply richer inference services
+through protocols and adapters.
 
 ## ACT-R (Anderson et al.)
 
-TODO. Concept influence on procedural traces. ACT-R bridges live downstream in host applications, not in Sakshi.
+ACT-R influenced the distinction between procedural traces and runtime control
+signals. ACT-R bridges live downstream in host applications, not in Sakshi, so
+the package core remains independent of ACT-R runtimes.
 
 ## MIDCA (Cox, Johnson, Raja, et al.)
 
-TODO. Object-level versus metacognitive distinction. The canonical OSS MIDCA reference is `COLAB2/midca` (MIT, unmaintained since 2022). Zero code is shared between Sakshi and MIDCA.
+MIDCA influenced Sakshi's object-level versus metacognitive distinction and the
+general idea of monitoring cognition before selecting control actions. Sakshi is
+not affiliated with MIDCA, is not a drop-in implementation of the MIDCA
+reference architecture, and shares zero code with the MIDCA codebase.
 
 ## Production cognitive-runtime experience
 
-TODO. Engineering provenance from a production cognitive runtime.
+Sakshi was extracted from Dionysus production-runtime experience after the core
+metacognitive pieces were separated from host-specific services such as event
+buses, graph stores, attractor basins, and active-inference adapters.
 
 ## Sandved-Smith et al. (niab018)
 
-TODO. Opacity and meta-awareness concepts.
+Opacity and meta-awareness concepts influenced Sakshi's attention to monitoring
+when a cognitive process is becoming difficult for the host to inspect or steer.
+Concrete opacity bridges remain host adapters rather than package-core
+dependencies.
