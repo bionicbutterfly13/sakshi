@@ -86,8 +86,7 @@ class InstructionIngestService:
                 source=request.source,
             )
 
-        goal_id = uuid4().hex
-        instruction_id = uuid4().hex
+        goal_id, instruction_id = await self._prepare_goal_identity(request)
         goal = Goal(
             id=goal_id,
             predicate=GoalPredicate(
@@ -123,6 +122,17 @@ class InstructionIngestService:
             goal_id=goal_id,
             source=request.source,
         )
+
+    async def _prepare_goal_identity(
+        self,
+        request: InstructionIngestRequest,
+    ) -> tuple[str, str]:
+        """Return `(goal_id, instruction_id)` for a new instruction goal.
+
+        Hosts may override this hook when an external runtime service must
+        reserve or mirror the goal id before Sakshi inserts the graph node.
+        """
+        return uuid4().hex, uuid4().hex
 
     def _validate(self, request: InstructionIngestRequest) -> list[str]:
         errors: list[str] = []
