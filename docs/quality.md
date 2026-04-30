@@ -15,14 +15,13 @@ Status labels:
 | `config.py` | C | Skeleton only; fields land as modules are ported. |
 | `cycle/` | A | Blackboard and cycle history ported; smoke-tested. |
 | `registries/` | A | Module and phase registries ported; smoke-tested. |
-| `interpret/` | Pending | World and expectation cluster not yet ported. |
+| `interpret/` | A | A-distance, ambiguity, anomaly persistence, and expectation evaluator ported; package-local tests cover key behavior. |
 | `goals/` | Pending | Goal subsystem not yet ported. |
 | `plans/` | Pending | Plan soundness and deviation not yet ported. |
 | `meta/` | Pending | Metacognitive controller not yet ported. |
 | `intake/` | Pending | Instruction ingest not yet ported. |
-| `world/` | Pending | World simulator not yet ported. |
+| `world/` | A | World simulator ported; package-local tests cover action scaling and discrepancy detection. |
 | Public docs | B | Initial README, contribution notes, architecture, principles, and quality docs exist; quickstart still pending. |
-| Tests | C | Smoke-tested manually; package-local pytest tests still pending. |
+| Tests | B | Package-local smoke tests cover DTOs, foundations, and world/expectation cluster; fuller behavioral tests still pending. |
 
 Update this file after each port cluster.
-
