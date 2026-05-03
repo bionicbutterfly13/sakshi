@@ -1,6 +1,6 @@
 .PHONY: help all setup fmt fmt-check lint test compile hygiene ci
 
-PYTHON ?= python3
+PYTHON ?= python
 
 help:
 	@echo "Targets: setup, fmt, fmt-check, lint, test, compile, hygiene, ci, all"
@@ -34,4 +34,3 @@ ci:
 	$(MAKE) test
 
 all: ci
-

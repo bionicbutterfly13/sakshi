@@ -21,7 +21,7 @@ Status labels:
 | `meta/` | B | Package-native monitor/assess/control loop ported with injected graph, generator, EventBus, and WriteGuard seams. Host-only particle lifecycle and LinOSS/AIS dispatch remain adapter-side. |
 | `intake/` | A | Instruction ingest ported with graph insertion, lineage metadata, validation, and deduplication; legacy goal-service sync remains adapter-side. |
 | `world/` | A | World simulator ported; package-local tests cover action scaling and discrepancy detection. |
-| Public docs | B | Initial README, contribution notes, architecture, principles, and quality docs exist; quickstart still pending. |
-| Tests | B | Package-local smoke tests cover DTOs, foundations, and world/expectation cluster; fuller behavioral tests still pending. |
+| Public docs | A | README, contribution notes, provenance, architecture, principles, quality docs, and quickstart exist. |
+| Tests | A | Package-local tests cover DTOs, foundations, world/interpretation, goals, plans, meta, and intake without host imports. |
 
 Update this file after each port cluster.

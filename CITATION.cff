@@ -1,0 +1,34 @@
+cff-version: 1.2.0
+message: "If you use Sakshi, please cite this package and the related work listed in INSPIRATION.md."
+title: "Sakshi"
+version: "0.1.0.dev0"
+date-released: 2026-05-03
+repository-code: "https://github.com/bionicbutterfly13/sakshi"
+url: "https://github.com/bionicbutterfly13/sakshi"
+license: "Apache-2.0"
+type: software
+authors:
+  - name: "Sakshi contributors"
+abstract: "A metacognitive runtime for Python agents: the Witness pattern."
+keywords:
+  - metacognition
+  - cognitive architecture
+  - agents
+  - monitor assess control
+  - active inference
+references:
+  - type: generic
+    title: "MIDCA: A Metacognitive, Integrated Dual-Cycle Architecture for Self-Regulated Autonomy"
+    authors:
+      - name: "COLAB2"
+    url: "https://github.com/COLAB2/midca"
+  - type: generic
+    title: "Active Inference"
+    authors:
+      - name: "Active Inference community"
+    url: "https://en.wikipedia.org/wiki/Active_inference"
+  - type: generic
+    title: "ACT-R"
+    authors:
+      - name: "Carnegie Mellon ACT-R Research Group"
+    url: "https://act-r.psy.cmu.edu/"
