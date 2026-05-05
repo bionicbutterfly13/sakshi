@@ -6,7 +6,7 @@ A metacognitive runtime for Python agents: the Witness pattern. A watching proce
 
 ## Status
 
-**0.x experimental.** The public API may change in any minor release. Not yet recommended for production use.
+**0.2.0 alpha.** First version verified end-to-end against a host integration. The public API may still change in 0.x minor releases. Approaching a 1.0 freeze; not yet recommended for unverified production use.
 
 ## Install
 
