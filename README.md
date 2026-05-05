@@ -10,11 +10,27 @@ A metacognitive runtime for Python agents: the Witness pattern. A watching proce
 
 ## Install
 
+Sakshi is published to PyPI under the distribution name `pysakshi`. The
+importable module is still `sakshi`:
+
 ```bash
-pip install sakshi
+pip install pysakshi
 ```
 
-(Not yet on PyPI; currently in early development.)
+```python
+import sakshi
+```
+
+The bare name `sakshi` is reserved by an unrelated PyPI account with no
+releases; once that name is recovered, `pysakshi` will become an alias.
+
+To install the latest unreleased commit from source:
+
+```bash
+pip install git+https://github.com/bionicbutterfly13/sakshi
+```
+
+Release process: see [`docs/release-checklist.md`](docs/release-checklist.md).
 
 ## What it is
 

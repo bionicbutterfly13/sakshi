@@ -1,8 +1,8 @@
 # Release Checklist
 
-Sakshi is currently a private alpha package and is not published to PyPI. Use
-this checklist before making the repository public, creating a GitHub release,
-or uploading to TestPyPI / PyPI.
+Sakshi is published to PyPI under the distribution name `pysakshi`. The
+importable module remains `sakshi`. Use this checklist before making the
+repository public, creating a GitHub release, or uploading to TestPyPI / PyPI.
 
 ## Pre-Release Gate
 
@@ -42,8 +42,9 @@ python -m twine check dist/*
 
 ## TestPyPI / PyPI
 
-- [ ] Publish to TestPyPI first.
-- [ ] Install from TestPyPI into a clean virtual environment.
+- [ ] Publish to TestPyPI first (`gh workflow run release.yml -f target=testpypi`).
+- [ ] Install from TestPyPI into a clean virtual environment
+  (`pip install --index-url https://test.pypi.org/simple/ pysakshi`).
 - [ ] Run a minimal import and cycle smoke:
 
 ```python
