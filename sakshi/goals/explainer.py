@@ -128,14 +128,22 @@ class AnomalyExplainer:
                 confidence=confidence,
             )
         except Exception as exc:
-            logger.debug("AnomalyExplainer.explain failed: %s", exc)
+            logger.warning(
+                "AnomalyExplainer.explain failed (%s: %s); returning "
+                "degraded explanation marked anomaly_class=unknown",
+                type(exc).__name__,
+                exc,
+            )
             return AnomalyExplanation(
                 anomaly_class="unknown",
                 recurrence_count=0,
                 basin_stability=0.0,
                 basin_strength=0.0,
                 is_novel=True,
-                hypothesis="Anomaly detected; causal explanation unavailable.",
+                hypothesis=(
+                    f"Anomaly detected; causal explanation unavailable "
+                    f"(explainer error: {type(exc).__name__})."
+                ),
                 confidence=0.3,
             )
 

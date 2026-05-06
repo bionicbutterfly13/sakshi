@@ -22,3 +22,26 @@ jobs:
           python -m pip install -e ".[dev]"
       - name: Check
         run: make PYTHON=python all
+
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install build tooling
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install build twine
+      - name: Build sdist and wheel
+        run: python -m build
+      - name: Validate package metadata
+        run: python -m twine check dist/*
+      - name: Upload distribution artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          if-no-files-found: error
+          retention-days: 14

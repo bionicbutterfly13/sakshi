@@ -32,3 +32,14 @@ This file is the short entry point for coding agents. It is a map, not a full ma
 
 Sakshi is in early extraction. The package has a public seam, DTOs, and the foundations cluster. Remaining clusters should update `docs/quality.md` as they land.
 
+## Graphify boundary
+
+Graphify is a project map, not ambient source context.
+
+- Do not read or re-index `graphify-out/` during normal agent work.
+- Do not treat Graphify output as campaign/source truth unless a run manifest explicitly authorizes it.
+- Use `.graphifyignore` before running Graphify.
+- Prefer `graphify update .` over full rebuilds.
+- Historical graph snapshots belong under `conductor/archive/graphs/` only at meaningful milestones, and should be linked from track closure notes rather than pasted into active tracks.
+- Do not index archives, generated runs, worktrees, Sync directories, secrets, or dependency/build artifacts.
+

@@ -6,15 +6,33 @@ A metacognitive runtime for Python agents: the Witness pattern. A watching proce
 
 ## Status
 
-**0.x experimental.** The public API may change in any minor release. Not yet recommended for production use.
+**0.2.0 alpha.** First version verified end-to-end against a host integration. The public API may still change in 0.x minor releases. Approaching a 1.0 freeze; not yet recommended for unverified production use.
+
+> ⚠ **The defaults are inert.** `NoOpEventBus`, `NoOpBasinHook`, and `AlwaysPermitWriteGuard` are intentional no-ops for tests and the quickstart below. A production host **must** inject real implementations of `EventBus`, `GoalStateStore`, and `WriteGuard` — otherwise events drop on the floor, world state never resolves, and every Sakshi-originated write is silently permitted. See `sakshi.protocols` for the interfaces and your host's adapter layer for examples.
 
 ## Install
 
+Sakshi is published to PyPI under the distribution name `pysakshi`. The
+importable module is still `sakshi`:
+
 ```bash
-pip install sakshi
+pip install pysakshi
 ```
 
-(Not yet on PyPI; currently in early development.)
+```python
+import sakshi
+```
+
+The bare name `sakshi` is reserved by an unrelated PyPI account with no
+releases; once that name is recovered, `pysakshi` will become an alias.
+
+To install the latest unreleased commit from source:
+
+```bash
+pip install git+https://github.com/bionicbutterfly13/sakshi
+```
+
+Release process: see [`docs/release-checklist.md`](docs/release-checklist.md).
 
 ## What it is
 

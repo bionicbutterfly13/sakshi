@@ -1,0 +1,52 @@
+# Graphify input exclusions
+# Purpose: keep Graphify as an intentional map, not a recursive/bloated corpus.
+
+# Graphify's own outputs and transient files
+graphify-out/
+.graphify_*
+*.graphml
+cypher.txt
+
+# Archives and historical snapshots: query intentionally, do not re-index by default
+archive/
+archives/
+.archives/
+conductor/archive/
+conductor/archives/
+.archive/
+
+# Agent/workflow generated state and logs
+.archon/run/
+.worktrees/
+.worktree/
+logs/
+*.log
+*.tmp
+*.bak
+
+# Dependencies/build artifacts
+.git/
+node_modules/
+.venv/
+venv/
+__pycache__/
+dist/
+build/
+.next/
+.cache/
+.pytest_cache/
+.coverage
+
+# Sensitive/local configuration
+.env
+.env.*
+*.pem
+*.key
+*.sqlite
+*.sqlite3
+
+# Protected sync folders: require explicit per-request approval
+Sync/
+sync/
+**/Sync/**
+**/sync/**

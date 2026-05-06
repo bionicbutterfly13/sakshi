@@ -38,3 +38,6 @@ htmlcov/
 *.swp
 *.swo
 .DS_Store
+
+# graphify knowledge-graph tooling output (regenerable, not source)
+graphify-out/
