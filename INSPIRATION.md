@@ -17,7 +17,7 @@ ACT-R influenced the distinction between procedural traces and runtime control
 signals. ACT-R bridges live downstream in host applications, not in Sakshi, so
 the package core remains independent of ACT-R runtimes.
 
-## MIDCA (Cox, Johnson, Raja, et al.)
+## MIDCA (Cox, Alavi, Dannenhauer, et al.)
 
 MIDCA influenced Sakshi's object-level versus metacognitive distinction and the
 general idea of monitoring cognition before selecting control actions. Sakshi is
@@ -26,7 +26,7 @@ reference architecture, and shares zero code with the MIDCA codebase.
 
 ## Production cognitive-runtime experience
 
-Sakshi was extracted from Dionysus production-runtime experience after the core
+Sakshi was extracted from production-runtime experience after the core
 metacognitive pieces were separated from host-specific services such as event
 buses, graph stores, attractor basins, and active-inference adapters.
 

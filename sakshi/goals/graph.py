@@ -182,9 +182,7 @@ class GoalGraph:
         if not statuses:
             return []
         return [
-            node.goal
-            for node in self._nodes.values()
-            if node.goal.status in statuses
+            node.goal for node in self._nodes.values() if node.goal.status in statuses
         ]
 
     def to_coupling_matrix(self) -> dict[tuple[str, str], float]:
