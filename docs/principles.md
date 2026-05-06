@@ -30,7 +30,7 @@ This document uses RFC 2119-style language: MUST, MUST NOT, SHOULD, SHOULD NOT, 
 
 ## Testing
 
-- Package tests MUST run without the Dionysus repository on `PYTHONPATH`.
+- Package tests MUST run without any private host repository on `PYTHONPATH`.
 - Host adapter tests belong in the host repository.
 - Any skipped external integration test MUST report as skipped, not silently passed.
 
@@ -39,4 +39,3 @@ This document uses RFC 2119-style language: MUST, MUST NOT, SHOULD, SHOULD NOT, 
 - Behavior-changing changes SHOULD update docs in the same commit.
 - New package areas SHOULD update `docs/quality.md`.
 - Public docs SHOULD describe what Sakshi does before describing influences.
-

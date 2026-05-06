@@ -40,6 +40,5 @@ Graphify is a project map, not ambient source context.
 - Do not treat Graphify output as campaign/source truth unless a run manifest explicitly authorizes it.
 - Use `.graphifyignore` before running Graphify.
 - Prefer `graphify update .` over full rebuilds.
-- Historical graph snapshots belong under `conductor/archive/graphs/` only at meaningful milestones, and should be linked from track closure notes rather than pasted into active tracks.
+- Historical graph snapshots belong under repo-local archives excluded by `.graphifyignore` only at meaningful milestones, and should be linked from closure notes rather than pasted into active work.
 - Do not index archives, generated runs, worktrees, Sync directories, secrets, or dependency/build artifacts.
-
