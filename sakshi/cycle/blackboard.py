@@ -83,14 +83,22 @@ class CognitiveBlackboard:
         """Create an immutable snapshot of current blackboard state.
 
         Returns a deep copy so mutations after the snapshot do not
-        affect it. Falls back to a shallow reference if a value is not
-        deep-copyable.
+        affect it. If a value is not deep-copyable, the snapshot stores
+        the live reference and emits a warning — callers should treat
+        such snapshots as best-effort, not isolation-safe.
         """
         data_copy: dict[str, Any] = {}
         for key, value in self._data.items():
             try:
                 data_copy[key.value] = copy.deepcopy(value)
-            except Exception:
+            except Exception as exc:
+                logger.warning(
+                    "CognitiveBlackboard.snapshot: deepcopy failed for "
+                    "key=%s type=%s; falling back to live reference: %s",
+                    key.value,
+                    type(value).__name__,
+                    exc,
+                )
                 data_copy[key.value] = value
         return BlackboardSnapshot(data=data_copy, cycle_id=cycle_id)
 
