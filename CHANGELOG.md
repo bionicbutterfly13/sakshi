@@ -7,6 +7,27 @@ releases may break public API in any minor version.
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-05-06
+
+### Added
+- `GoalGraph.iter_goals()` — public iterator over every goal in the
+  graph regardless of status. Stable insertion order.
+- `GoalGraph.get_goals_by_status(statuses)` — public filter for goals
+  matching any of the supplied :class:`GoalStatus` values. Empty
+  filter returns an empty list.
+- `CognitiveBlackboard.snapshot` — deepcopy failures now log a warning
+  with the offending key + value type instead of silently aliasing
+  live state. Snapshots remain best-effort but no longer fail invisibly.
+- `AnomalyExplainer.explain` — broad-except handler promoted from
+  `debug` to `warning`; the degraded `AnomalyExplanation` now surfaces
+  the underlying error class in its `hypothesis` text so callers can
+  see when an explanation is a fallback.
+
+### Changed
+- README Status section: explicit warning that the `NoOpEventBus`,
+  `NoOpBasinHook`, and `AlwaysPermitWriteGuard` defaults are inert by
+  design; production hosts must inject real implementations.
+
 ## [0.2.0] - 2026-05-05
 
 ### Added
