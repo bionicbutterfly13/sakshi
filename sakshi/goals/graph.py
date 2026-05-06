@@ -158,6 +158,35 @@ class GoalGraph:
         """Return active goals whose prerequisites are satisfied."""
         return [node.goal for node in self._nodes.values() if node.is_active]
 
+    def iter_goals(self) -> list[Goal]:
+        """Return every goal currently in the graph (any status).
+
+        Order is insertion-stable. Hosts that need to scan terminal goals
+        for persistence should prefer :meth:`get_goals_by_status` instead
+        of pulling this and filtering — the explicit filter form keeps
+        intent visible in caller code.
+        """
+        return [node.goal for node in self._nodes.values()]
+
+    def get_goals_by_status(self, statuses: set[GoalStatus]) -> list[Goal]:
+        """Return goals whose status is in ``statuses``.
+
+        Args:
+            statuses: Set of :class:`GoalStatus` values to match. Empty
+                set returns an empty list.
+
+        Returns:
+            Matching goals in insertion order. Empty list if no matches
+            or ``statuses`` is empty.
+        """
+        if not statuses:
+            return []
+        return [
+            node.goal
+            for node in self._nodes.values()
+            if node.goal.status in statuses
+        ]
+
     def to_coupling_matrix(self) -> dict[tuple[str, str], float]:
         """Export active parent-child basin edges as a coupling matrix.
 

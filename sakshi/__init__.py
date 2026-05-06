@@ -22,7 +22,7 @@ from sakshi.protocols import (
 )
 from sakshi.registries import PhaseRegistry
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 
 __all__ = [
     "AlwaysPermitWriteGuard",

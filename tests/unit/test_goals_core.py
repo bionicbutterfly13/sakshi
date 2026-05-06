@@ -59,6 +59,32 @@ def test_goal_graph_frontier_stack_plan_and_coupling() -> None:
     assert graph.get_active_frontier() == []
 
 
+def test_goal_graph_iter_goals_and_status_filter() -> None:
+    graph = GoalGraph()
+    a = _goal("a")
+    b = _goal("b")
+    c = _goal("c")
+
+    graph.add_goal(a)
+    graph.add_goal(b)
+    graph.add_goal(c)
+    graph.mark_achieved("a")
+    graph.mark_abandoned("b")
+    graph.delegate_goal("c", "human")
+
+    assert [g.id for g in graph.iter_goals()] == ["a", "b", "c"]
+
+    terminal = graph.get_goals_by_status(
+        {GoalStatus.ACHIEVED, GoalStatus.ABANDONED, GoalStatus.DELEGATED}
+    )
+    assert {g.id for g in terminal} == {"a", "b", "c"}
+
+    achieved_only = graph.get_goals_by_status({GoalStatus.ACHIEVED})
+    assert [g.id for g in achieved_only] == ["a"]
+
+    assert graph.get_goals_by_status(set()) == []
+
+
 def test_goal_selector_orders_by_mod_selection_score() -> None:
     low = _goal("low", priority=1)
     high = _goal("high", priority=3)
