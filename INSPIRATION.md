@@ -40,6 +40,9 @@ volume: Devitt's competence-vs-integrity bifurcation
 chapter; the influence is on shape and naming of the typed surface
 the package exposes.
 
+For the chapter-by-chapter Sakshi relevance audit, see
+[docs/trusted-autonomy-audit.md](docs/trusted-autonomy-audit.md).
+
 ## Goal Lifecycle Networks (Roberts, NRL)
 
 Roberts's goal-lifecycle work informed the `GoalMode` state machine
