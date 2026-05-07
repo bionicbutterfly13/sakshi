@@ -11,6 +11,7 @@ from sakshi.interpret.a_distance import (
 from sakshi.interpret.ambiguity import AmbiguityReport, DRFreeAmbiguityDetector
 from sakshi.interpret.anomaly_persistence import AnomalyPersistenceTracker
 from sakshi.interpret.expectations import ExpectationEvaluator
+from sakshi.interpret.explanation import ExplanationEngine, ExplanationHypothesis
 
 __all__ = [
     "ADistanceDetector",
@@ -19,6 +20,8 @@ __all__ = [
     "AnomalyPersistenceTracker",
     "DRFreeAmbiguityDetector",
     "ExpectationEvaluator",
+    "ExplanationEngine",
+    "ExplanationHypothesis",
     "PredicateStream",
     "compute_a_distance",
 ]

@@ -14,6 +14,7 @@ from datetime import UTC, datetime
 
 from pydantic import BaseModel, Field
 
+from sakshi.models.anomaly import AnomalySourceType
 from sakshi.protocols import EventBus
 
 logger = logging.getLogger(__name__)
@@ -28,7 +29,15 @@ PRIOR_BASELINE_WINDOWS: dict[str, int | None] = {
 
 
 class AnomalyEvent(BaseModel):
-    """Statistical anomaly detected in an activation stream."""
+    """Statistical anomaly detected in an activation stream.
+
+    The ``source`` field tags the anomaly's origin lane. The A-distance
+    detector defaults to ``WORLD`` because it operates on environment
+    activations; meta-cycle internal detectors should construct events
+    with ``source=COGNITIVE``. ``COMPOUND`` is reserved for events that
+    legitimately straddle both lanes and must be decomposed before
+    explanation.
+    """
 
     a_distance: float = Field(
         ge=0.0,
@@ -39,6 +48,10 @@ class AnomalyEvent(BaseModel):
     baseline_mean: dict[str, float] = Field(default_factory=dict)
     detected_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
     threshold_used: float = 0.5
+    source: AnomalySourceType = Field(
+        default=AnomalySourceType.WORLD,
+        description="Origin lane: WORLD | COGNITIVE | COMPOUND",
+    )
 
     @property
     def severity(self) -> str:

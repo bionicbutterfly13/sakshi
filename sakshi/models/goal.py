@@ -2,6 +2,14 @@
 
 Hierarchical goal structures with predicate representation, lifecycle
 status, plans, and outcome records.
+
+``GoalStatus`` and ``GoalMode`` are intentionally orthogonal. ``GoalStatus``
+records the *terminal* state of a goal (active, achieved, abandoned,
+blocked, delegated). ``GoalMode`` records the *current lifecycle phase*
+within an active goal (formulating, dispatched, monitoring, repairing,
+deferred). Both coexist on every goal so callers can ask
+"is this goal still in play?" (status) separately from
+"what is the goal currently doing?" (mode).
 """
 
 from __future__ import annotations
@@ -14,13 +22,61 @@ from pydantic import BaseModel, Field
 
 
 class GoalStatus(StrEnum):
-    """Goal lifecycle status."""
+    """Goal lifecycle status (terminal-state axis)."""
 
     ACTIVE = "active"
     ACHIEVED = "achieved"
     ABANDONED = "abandoned"
     BLOCKED = "blocked"
     DELEGATED = "delegated"
+
+
+class GoalMode(StrEnum):
+    """Active-phase axis for a goal in flight.
+
+    Mirrors the goal-lifecycle-network state machine: a goal is
+    formulated, then selected and dispatched into execution, then
+    monitored, then either repaired or deferred when monitoring finds
+    trouble. ``COMPLETED`` is a terminal mode independent of whether
+    ``GoalStatus`` recorded the close as ``ACHIEVED`` or ``ABANDONED``.
+    """
+
+    FORMULATING = "formulating"
+    SELECTED = "selected"
+    DISPATCHED = "dispatched"
+    MONITORING = "monitoring"
+    REPAIRING = "repairing"
+    DEFERRED = "deferred"
+    COMPLETED = "completed"
+
+
+class GoalEventType(StrEnum):
+    """Causes of a transition recorded on a goal's event history."""
+
+    FORMULATED = "formulated"
+    SELECTED = "selected"
+    DISPATCHED = "dispatched"
+    MONITOR_OK = "monitor_ok"
+    MONITOR_VIOLATION = "monitor_violation"
+    REPAIR_STARTED = "repair_started"
+    REPAIR_COMPLETED = "repair_completed"
+    DEFERRED = "deferred"
+    RESUMED = "resumed"
+    COMPLETED = "completed"
+
+
+class GoalEvent(BaseModel):
+    """One transition record in a goal's lifecycle history."""
+
+    event_type: GoalEventType
+    from_mode: GoalMode | None = None
+    to_mode: GoalMode | None = None
+    cause: str = Field(
+        default="",
+        description="Short human-readable reason for the transition",
+    )
+    cycle_id: str | None = None
+    occurred_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
 
 class GoalPredicate(BaseModel):
@@ -49,6 +105,8 @@ class Goal(BaseModel):
     predicate: GoalPredicate
     basin_name: str = ""
     status: GoalStatus = GoalStatus.ACTIVE
+    mode: GoalMode = GoalMode.FORMULATING
+    transitions: list[GoalEvent] = Field(default_factory=list)
     priority: int = 1
     prior_type: str = "λ"
     source: str = ""
@@ -66,6 +124,32 @@ class Goal(BaseModel):
             GoalStatus.ABANDONED,
             GoalStatus.DELEGATED,
         )
+
+    def record_transition(
+        self,
+        *,
+        event_type: GoalEventType,
+        to_mode: GoalMode | None = None,
+        cause: str = "",
+        cycle_id: str | None = None,
+    ) -> GoalEvent:
+        """Append a lifecycle transition event and update ``mode``.
+
+        Returns the recorded event so callers can attach it to a trace
+        or emit it on the host event bus.
+        """
+        from_mode = self.mode
+        if to_mode is not None:
+            self.mode = to_mode
+        event = GoalEvent(
+            event_type=event_type,
+            from_mode=from_mode,
+            to_mode=to_mode,
+            cause=cause,
+            cycle_id=cycle_id,
+        )
+        self.transitions.append(event)
+        return event
 
 
 class GoalPlan(BaseModel):
@@ -98,6 +182,9 @@ class GoalOutcomeRecord(BaseModel):
 
 __all__ = [
     "Goal",
+    "GoalEvent",
+    "GoalEventType",
+    "GoalMode",
     "GoalOutcomeRecord",
     "GoalPlan",
     "GoalPredicate",

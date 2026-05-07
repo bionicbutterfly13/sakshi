@@ -55,12 +55,20 @@ class AnomalyType(StrEnum):
 
 
 class ControlActionType(StrEnum):
-    """Types of metacognitive control actions emitted by the meta-loop."""
+    """Types of metacognitive control actions emitted by the meta-loop.
+
+    ``REPLACE_MODULE`` is distinct from ``SWAP_MODULE``: a swap
+    exchanges one already-registered service for another already-known
+    alternative, while a replace installs a fundamentally different
+    implementation (often after a host or operator decision that the
+    previous service class was unsuitable).
+    """
 
     STRENGTHEN_MODULE = "STRENGTHEN_MODULE"
     SUPPRESS_MODULE = "SUPPRESS_MODULE"
     ADJUST_PRECISION = "ADJUST_PRECISION"
     SWAP_MODULE = "SWAP_MODULE"
+    REPLACE_MODULE = "REPLACE_MODULE"
 
 
 class PhaseConfig(BaseModel):

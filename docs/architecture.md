@@ -40,13 +40,62 @@ The object-level cycle is:
 PERCEIVE -> INTERPRET -> EVAL -> INTEND -> PLAN -> ACT
 ```
 
-The metacognitive loop is:
+The metacognitive loop mirrors the object-level cycle:
 
 ```text
-MONITOR -> ASSESS -> CONTROL
+MONITOR -> INTERPRET -> EVALUATE -> INTEND -> PLAN -> CONTROL
 ```
 
 These are generic metacognitive phases, not a compatibility claim for any external reference implementation.
+
+## Anomaly lanes
+
+Every detected anomaly carries an `AnomalySourceType` tag at detection:
+
+- `WORLD` — mismatch between expected and observed environment state. Triggers world-model corrections.
+- `COGNITIVE` — mismatch inside the agent's own reasoning trace (impasse, expectation violation on a phase output, plan deviation). Triggers meta-cycle adjustments.
+- `COMPOUND` — straddles both lanes. Decomposed at detection, not at explanation.
+
+Calibration metrics and explanation pipelines are reported per lane. Cross-lane aggregates conflate object-level and meta-level signals and mislead host operators.
+
+## Goal lifecycle
+
+`Goal` carries two orthogonal axes:
+
+- `GoalStatus` — terminal state (active, achieved, abandoned, blocked, delegated).
+- `GoalMode` — current lifecycle phase (formulating, selected, dispatched, monitoring, repairing, deferred, completed) plus an event history (`Goal.transitions`).
+
+Hosts subscribe to `goal.op` events on the `EventBus` to receive `GoalOperationEvent` records describing the canonical lifecycle verbs (formulate, select, expand, commit, dispatch, monitor, evaluate, repair, defer, delegate, resume).
+
+## Discrepancy resolution
+
+`DiscrepancyResolution` records the four-step chain `symptom → explanation → goal → plan` end-to-end at either the object or meta level. The same shape applies on both levels by design: a fact-vs-expectation mismatch in the world produces a goal that fixes the world; a phase-output-vs-expectation mismatch in cognition produces a goal that fixes the cognition.
+
+## Trace pruning
+
+The meta-cycle does not reason over the full unbounded `CycleTrace`. Hosts pass a `TracePruner` (see `sakshi.cycle`) that reduces the trace to a relevant slice. Three defaults ship with the package:
+
+- `LastNPruner` — keep the final N phase results.
+- `SinceAnomalyPruner` — keep every phase from the most recent anomaly forward.
+- `WhereExpectationFiredPruner` — keep only phases whose output flagged at least one expectation.
+
+Hosts can write their own implementations against the protocol; the package never selects a pruner on the caller's behalf.
+
+## Plan decomposition and constraints
+
+`TaskDecomposer` (in `sakshi.plans`) is the seam for HTN-style or any other structured planning. The package itself never imports a planner.
+
+`GoalConstraint` (in `sakshi.plans`) reifies the bounds on a goal's feasibility — initial state, safety constraints, goal conditions — plus an `integrity_critical` flag that downstream modification guards read to refuse dropping the constraint.
+
+## Tiered transparency
+
+`TransparencyLevel` selects which DTO a host surfaces to humans:
+
+- `StatusTransparency` — current state and active goals.
+- `ReasoningTransparency` — the most recent decision's reasoning chain.
+- `ProjectionTransparency` — forecasts and risk estimates.
+
+Consumers usually want exactly one tier; the DTOs are not unioned.
 
 ## Failure Model
 

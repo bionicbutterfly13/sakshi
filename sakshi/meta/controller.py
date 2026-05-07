@@ -134,22 +134,55 @@ class MetaController:
         opacity_level: float = 0.0,
         plan_failure_goal_ids: Iterable[str] = (),
     ) -> MetaCycleResult:
-        """Execute MONITOR -> ASSESS -> CONTROL."""
+        """Execute MONITOR -> INTERPRET -> EVALUATE -> INTEND -> PLAN -> CONTROL."""
+        # 1. MONITOR: Gather cognitive trace metrics
         monitoring_data = await self._monitor(cycle_trace, opacity_level=opacity_level)
-        self._run_goal_monitor(cycle_trace)
-        self._run_goal_transformer(plan_failure_goal_ids)
-        await self._run_anomaly_escalation(
-            monitoring_data,
-            achieved_goal_ids=set(cycle_trace.achieved_goals or []),
-        )
+
+        # 2. INTERPRET: Detect anomalies and make sense of monitoring data
+        await self._interpret(monitoring_data, set(cycle_trace.achieved_goals or []))
+
+        # 3. EVALUATE: Assess goal completion and overall performance
+        self._evaluate(cycle_trace)
         assessment = await self._assess(monitoring_data)
-        actions = self._generate_control_actions(assessment)
-        await self._publish_meta_control(cycle_trace.cycle_id, actions)
+
+        # 4. INTEND: Formulate or transform meta-goals based on assessment
+        self._intend(plan_failure_goal_ids)
+
+        # 5. PLAN: Generate control actions to achieve meta-goals
+        actions = self._plan(assessment)
+
+        # 6. CONTROL: Execute the control actions
+        await self._control(cycle_trace.cycle_id, actions)
+
         return MetaCycleResult(
             actions=actions,
             assessment=assessment,
             monitoring_data=monitoring_data,
         )
+
+    async def _interpret(
+        self,
+        monitoring_data: Mapping[str, Any],
+        achieved_goal_ids: set[str],
+    ) -> None:
+        """INTERPRET phase: Detect anomalies and make sense of the trace."""
+        await self._run_anomaly_escalation(monitoring_data, achieved_goal_ids)
+
+    def _evaluate(self, cycle_trace: CycleTrace) -> None:
+        """EVALUATE phase: Check goal validity and completion."""
+        self._run_goal_monitor(cycle_trace)
+
+    def _intend(self, plan_failure_goal_ids: Iterable[str]) -> None:
+        """INTEND phase: Select or transform goals to pursue."""
+        self._run_goal_transformer(plan_failure_goal_ids)
+
+    def _plan(self, assessment: Mapping[str, Any]) -> list[ControlAction]:
+        """PLAN phase: Generate actions to correct cognitive issues."""
+        return self._generate_control_actions(assessment)
+
+    async def _control(self, cycle_id: str, actions: list[ControlAction]) -> None:
+        """CONTROL phase: Execute the control actions."""
+        await self._publish_meta_control(cycle_id, actions)
 
     async def _monitor(
         self,

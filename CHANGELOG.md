@@ -7,6 +7,50 @@ releases may break public API in any minor version.
 
 ## [Unreleased]
 
+## [0.4.0a0] - 2026-05-07
+
+### Added
+- `AnomalySourceType` enum (`WORLD | COGNITIVE | COMPOUND`) and a `source`
+  field on `AnomalyEvent` and `AnomalyEscalation`. Anomalies are now tagged
+  at detection so calibration and explanation can be reported per lane.
+- `GoalMode` lifecycle enum (formulating / selected / dispatched /
+  monitoring / repairing / deferred / completed) and `GoalEvent`
+  history on every `Goal`, with `Goal.record_transition()` helper.
+  `GoalMode` is orthogonal to the existing `GoalStatus`.
+- `GoalOperation` taxonomy enum and `GoalOperationEvent` DTO covering the
+  canonical lifecycle verbs (formulate, select, expand, commit, dispatch,
+  monitor, evaluate, repair, defer, delegate, resume).
+- `DiscrepancyResolution` DTO and `ResolutionLevel` enum capturing the
+  symptom → explanation → goal → plan chain end-to-end at object or
+  meta level.
+- `TransparencyLevel` enum and three tier DTOs (`StatusTransparency`,
+  `ReasoningTransparency`, `ProjectionTransparency`) for tiered host
+  disclosure of agent state and reasoning.
+- `GoalConstraint` frozen DTO in `sakshi.plans` carrying
+  `(initial_state, safety_constraints, goal_conditions,
+  integrity_critical)`. The `integrity_critical` flag is the contract
+  surface a future modification guard reads to refuse dropping a
+  constraint.
+- `TracePruner` protocol in `sakshi.cycle` plus three default
+  implementations: `LastNPruner`, `SinceAnomalyPruner`, and
+  `WhereExpectationFiredPruner`. Bounds the meta-cycle's input on
+  long-running agents.
+- `TaskDecomposer` protocol and `Action` DTO in `sakshi.plans`. Lets
+  hosts plug HTN-style or other structured planners behind a stable
+  package seam.
+- `ControlActionType.REPLACE_MODULE` for the case where a meta-cycle
+  decision is to install a fundamentally different module rather than
+  swap to a known alternative.
+
+### Removed
+- Two extraneous control-action enum entries imported from an external
+  draft plan, together with their emitter module under `meta/`. They
+  were never part of Sakshi's process. The underlying
+  static-policy-entrenchment signal will return as
+  `CanalizationMetrics` in a later release with proper typing. The
+  `Goal-Driven Autonomy` prose section that depended on those entries
+  was also removed from `docs/architecture.md`.
+
 ## [0.3.0] - 2026-05-06
 
 ### Added

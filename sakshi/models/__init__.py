@@ -5,6 +5,7 @@ from __future__ import annotations
 from sakshi.models.anomaly import (
     ESCALATION_THRESHOLDS,
     AnomalyEscalation,
+    AnomalySourceType,
     EscalationLevel,
 )
 from sakshi.models.blackboard import BlackboardKey, BlackboardSnapshot
@@ -20,6 +21,7 @@ from sakshi.models.cycle import (
     PhaseResult,
     PriorType,
 )
+from sakshi.models.discrepancy import DiscrepancyResolution, ResolutionLevel
 from sakshi.models.execution import (
     ActionExecutionResult,
     ActionExecutionStatus,
@@ -32,16 +34,32 @@ from sakshi.models.expectation import (
 )
 from sakshi.models.goal import (
     Goal,
+    GoalEvent,
+    GoalEventType,
+    GoalMode,
     GoalOutcomeRecord,
     GoalPlan,
     GoalPredicate,
     GoalStatus,
 )
+from sakshi.models.operation import (
+    GOAL_OPERATION_EVENT_TYPE,
+    GoalOperation,
+    GoalOperationEvent,
+)
+from sakshi.models.transparency import (
+    ProjectionTransparency,
+    ReasoningTransparency,
+    StatusTransparency,
+    TransparencyLevel,
+)
 from sakshi.models.world_state import WorldStateSnapshot
 
 __all__ = [
     "ESCALATION_THRESHOLDS",
+    "GOAL_OPERATION_EVENT_TYPE",
     "AnomalyEscalation",
+    "AnomalySourceType",
     "AnomalyType",
     "ActionExecutionResult",
     "ActionExecutionStatus",
@@ -51,11 +69,17 @@ __all__ = [
     "ControlAction",
     "ControlActionType",
     "CycleTrace",
+    "DiscrepancyResolution",
     "EscalationLevel",
     "ExpectationSeverity",
     "ExpectationViolation",
     "Goal",
+    "GoalEvent",
+    "GoalEventType",
     "GoalExecutionSummary",
+    "GoalMode",
+    "GoalOperation",
+    "GoalOperationEvent",
     "GoalOutcomeRecord",
     "GoalPlan",
     "GoalPredicate",
@@ -66,5 +90,10 @@ __all__ = [
     "PhaseConfig",
     "PhaseResult",
     "PriorType",
+    "ProjectionTransparency",
+    "ReasoningTransparency",
+    "ResolutionLevel",
+    "StatusTransparency",
+    "TransparencyLevel",
     "WorldStateSnapshot",
 ]
