@@ -7,6 +7,23 @@ releases may break public API in any minor version.
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-05-07
+
+### Added
+- Phase G documentation sweep: anomaly-lane integrity principle,
+  two-axis self-trust principle, goal-creativity envelope principle,
+  goal interrogability principle, and defensive-guard discipline
+  principle added to [docs/principles.md](docs/principles.md).
+- [INSPIRATION.md](INSPIRATION.md): CLARION (Sun) and Goal Lifecycle
+  Networks (Roberts, NRL) added; new section attributing Phase D / E
+  / F shape and naming to specific chapters in *Foundations of
+  Trusted Autonomy* (Abbass / Scholz / Reid eds., 2018, Springer
+  Open).
+
+### Changed
+- Version cut from 0.9.0a0 alpha-tag to 0.9.0 once Phases A through
+  G shipped on main with all 198 tests green.
+
 ## [0.9.0a0] - 2026-05-07
 
 ### Added
