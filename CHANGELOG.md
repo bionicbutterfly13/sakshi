@@ -7,6 +7,43 @@ releases may break public API in any minor version.
 
 ## [Unreleased]
 
+## [0.8.0a0] - 2026-05-07
+
+### Added
+- `models.MotivationType` enum — coarse taxonomy of motivation
+  sources (`ACHIEVEMENT`, `AFFILIATION`, `POWER`, `NOVELTY`,
+  `COMPETENCE`, `SURPRISE`, `EXTRINSIC`, `UNCLASSIFIED`). Hosts tag
+  every intrinsic goal with the type that produced it; Sakshi never
+  generates motivation, only observes the host's record.
+- `models.MotivationEvent` — immutable event DTO every motivation
+  activation produces, including rejections.
+- `models.CreativityEnvelope` + `evaluate_envelope` — host-declared
+  bounds (allowed predicates, forbidden attributes, max novelty
+  score, forbidden motivation types) plus a pure function that
+  returns an `EnvelopeVerdict`. Goals outside the envelope are
+  rejected with reason; the rejection still flows through the
+  auditor.
+- `models.GoalRelevanceFilter` — host-declared value-tag taxonomy
+  with optional `require_value_tag` strict mode.
+- `models.ComputationalMotivationMetrics` — frozen four-scalar
+  summary (`diversity_score`, `stability_score`, `risk_assessment`,
+  `communication_cost`) bounded to `[0, 1]`.
+- `goals.MotivationAuditor` — bounded ring-buffer audit log over
+  `MotivationEvent` records with `record`, `filter_by_type`,
+  `acceptance_rate`, and `metrics()` accessors. The auditor never
+  decides; it stores typed records and exposes a metrics view.
+
+### Notes
+- The full CLARION-style two-level motivation subsystem
+  (TwoLevelMotivationSubsystem with implicit-drive Q-values) and
+  the entropy-based CuriosityDrive scorer (originally proposed) are
+  deferred. They model the host's mind, which is outside Sakshi's
+  Witness-pattern scope. Hosts that want them implement them
+  internally and emit `MotivationEvent` records into the auditor.
+- `NarrativeMotivationJustifier` (templated explanations) and
+  `MotivationDriftDetector` deferred; the metrics view already
+  surfaces drift via `diversity_score` and `stability_score`.
+
 ## [0.7.0a0] - 2026-05-07
 
 ### Added

@@ -18,6 +18,7 @@ from sakshi.errors import (
 )
 from sakshi.goals import (
     AcceptingRebelHook,
+    MotivationAuditor,
     RebelDecision,
     RebelHook,
     RebelVerdict,
@@ -57,7 +58,10 @@ from sakshi.meta import (
 )
 from sakshi.models import (
     AnomalySourceType,
+    ComputationalMotivationMetrics,
+    CreativityEnvelope,
     DiscrepancyResolution,
+    EnvelopeVerdict,
     ExpectationProfile,
     FailureMode,
     GoalEvent,
@@ -65,6 +69,9 @@ from sakshi.models import (
     GoalMode,
     GoalOperation,
     GoalOperationEvent,
+    GoalRelevanceFilter,
+    MotivationEvent,
+    MotivationType,
     ProjectionTransparency,
     ReasoningTransparency,
     ResolutionLevel,
@@ -73,6 +80,7 @@ from sakshi.models import (
     TrustBifurcation,
     TrustReport,
     UncertaintyType,
+    evaluate_envelope,
 )
 from sakshi.plans import (
     Action,
@@ -96,7 +104,7 @@ from sakshi.protocols import (
 )
 from sakshi.registries import PhaseRegistry
 
-__version__ = "0.7.0a0"
+__version__ = "0.8.0a0"
 
 __all__ = [
     "AcceptingRebelHook",
@@ -113,13 +121,16 @@ __all__ = [
     "CanalizationMetrics",
     "CanalizationRisk",
     "Clock",
+    "ComputationalMotivationMetrics",
     "ConfidenceObservation",
     "ConfusionDecision",
     "ConfusionWeighter",
+    "CreativityEnvelope",
     "DeliberationDecision",
     "DeliberationGate",
     "DeliberationPath",
     "DiscrepancyResolution",
+    "EnvelopeVerdict",
     "EventBus",
     "EveryCyclePolicy",
     "ExpectationProfile",
@@ -131,6 +142,7 @@ __all__ = [
     "GoalMode",
     "GoalOperation",
     "GoalOperationEvent",
+    "GoalRelevanceFilter",
     "GoalStateStore",
     "GoalValidationError",
     "InterventionDecision",
@@ -143,6 +155,9 @@ __all__ = [
     "LineageReport",
     "LineageVerdict",
     "MetaSchedulingPolicy",
+    "MotivationAuditor",
+    "MotivationEvent",
+    "MotivationType",
     "NoOpBasinHook",
     "NoOpEventBus",
     "OnAnomalyPolicy",
@@ -177,4 +192,5 @@ __all__ = [
     "WriteGuard",
     "__version__",
     "classify_failure_mode",
+    "evaluate_envelope",
 ]

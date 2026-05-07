@@ -199,6 +199,17 @@ Returns a frozen `PlanRiskAssessment`. Slots into the EVAL phase before commit.
 
 `ConfusionWeighter` is a typed cost-matrix decision helper. Given a probability vector and a `{predicted: {true: cost}}` matrix, it picks the class minimizing expected cost rather than the naive arg-max. Returns a `ConfusionDecision` recording both the chosen class and the naive baseline so audit trails show what the asymmetric cost structure actually changed. `ConfusionWeighter.from_uniform` builds a starter matrix from a class list plus FP/FN cost scalars.
 
+## Motivation surface
+
+Sakshi does not generate intrinsic motivations on its own — the host does. What Sakshi provides is the typed surface hosts use to:
+
+- Tag every goal with the source `MotivationType` (achievement / affiliation / power / novelty / competence / surprise / extrinsic / unclassified).
+- Bound the host's motivation creativity through a `CreativityEnvelope` (allowed predicates, forbidden attributes, max novelty score, forbidden motivation types). `evaluate_envelope(...)` returns a typed `EnvelopeVerdict`.
+- Filter motivated goals against a `GoalRelevanceFilter` over a host-defined value-tag taxonomy.
+- Stream every motivation activation through `MotivationAuditor` — a bounded ring-buffer that produces `ComputationalMotivationMetrics` (diversity, stability, risk, communication cost) on demand.
+
+The Witness stance: Sakshi observes the host's motivation record, validates against host-declared envelopes, and reports — never generates.
+
 ## Failure Model
 
 Sakshi raises typed package exceptions from `sakshi.errors`.

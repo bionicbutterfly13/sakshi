@@ -23,6 +23,11 @@ from sakshi.goals.graph import (
     GoalNode,
 )
 from sakshi.goals.monitor import GoalMonitor, GoalMonitorResult
+from sakshi.goals.motivation import (
+    DEFAULT_AUDITOR_WINDOW,
+    RISK_TYPES,
+    MotivationAuditor,
+)
 from sakshi.goals.outcome_closure import GoalOutcomeClosureService
 from sakshi.goals.outcome_memory import GoalOutcomeMemory
 from sakshi.goals.rebel import (
@@ -40,8 +45,10 @@ from sakshi.goals.validator import (
 )
 
 __all__ = [
+    "DEFAULT_AUDITOR_WINDOW",
     "DEFAULT_PARENT_COUPLING",
     "MAX_COUPLING_BASINS",
+    "RISK_TYPES",
     "AcceptingRebelHook",
     "DomainRegistry",
     "GoalEdge",
@@ -60,6 +67,7 @@ __all__ = [
     "GoalValidationResult",
     "GoalValidator",
     "ModSelectionCriteria",
+    "MotivationAuditor",
     "RebelDecision",
     "RebelHook",
     "RebelVerdict",

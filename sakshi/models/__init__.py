@@ -44,6 +44,15 @@ from sakshi.models.goal import (
     GoalPredicate,
     GoalStatus,
 )
+from sakshi.models.motivation import (
+    ComputationalMotivationMetrics,
+    CreativityEnvelope,
+    EnvelopeVerdict,
+    GoalRelevanceFilter,
+    MotivationEvent,
+    MotivationType,
+    evaluate_envelope,
+)
 from sakshi.models.operation import (
     GOAL_OPERATION_EVENT_TYPE,
     GoalOperation,
@@ -73,10 +82,13 @@ __all__ = [
     "BlackboardKey",
     "BlackboardSnapshot",
     "CognitiveExpectation",
+    "ComputationalMotivationMetrics",
     "ControlAction",
     "ControlActionType",
+    "CreativityEnvelope",
     "CycleTrace",
     "DiscrepancyResolution",
+    "EnvelopeVerdict",
     "EscalationLevel",
     "ExpectationProfile",
     "ExpectationSeverity",
@@ -92,7 +104,10 @@ __all__ = [
     "GoalOutcomeRecord",
     "GoalPlan",
     "GoalPredicate",
+    "GoalRelevanceFilter",
     "GoalStatus",
+    "MotivationEvent",
+    "MotivationType",
     "NPState",
     "NPStateSnapshot",
     "OODAPhase",
@@ -108,4 +123,5 @@ __all__ = [
     "TrustReport",
     "UncertaintyType",
     "WorldStateSnapshot",
+    "evaluate_envelope",
 ]
