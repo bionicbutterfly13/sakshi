@@ -41,3 +41,6 @@ htmlcov/
 
 # graphify knowledge-graph tooling output (regenerable, not source)
 graphify-out/
+
+# Conductor local control-plane artifacts
+conductor/

@@ -53,6 +53,4 @@ def test_invalid_thresholds_rejected() -> None:
 def test_invalid_inputs_rejected() -> None:
     gate = DeliberationGate()
     with pytest.raises(ValueError):
-        gate.decide(
-            confidence=2.0, recent_failure_rate=0.0, remaining_budget=1.0
-        )
+        gate.decide(confidence=2.0, recent_failure_rate=0.0, remaining_budget=1.0)

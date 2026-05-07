@@ -65,9 +65,7 @@ def test_warn_band_between_thresholds() -> None:
     g2 = transformer.generalize(g1)
     g3 = transformer.generalize(g2)
     by_id = {g.id: g for g in (root, g1, g2, g3)}
-    auditor = GoalLineageAuditor(
-        depth_warn_threshold=3, depth_drift_threshold=5
-    )
+    auditor = GoalLineageAuditor(depth_warn_threshold=3, depth_drift_threshold=5)
     report = auditor.audit(g3, by_id)
     assert report.depth == 3
     assert report.verdict == LineageVerdict.WARN

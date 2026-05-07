@@ -38,9 +38,7 @@ class ExplanationEngine:
         self._rules: list[dict[str, Any]] = []
 
     def explain_anomaly(
-        self,
-        anomaly_type: AnomalyType,
-        context: dict[str, Any]
+        self, anomaly_type: AnomalyType, context: dict[str, Any]
     ) -> ExplanationHypothesis | None:
         """Attempt to explain an anomaly and return a hypothesis."""
 
@@ -73,8 +71,7 @@ class ExplanationEngine:
         return None
 
     def formulate_goal_from_hypothesis(
-        self,
-        hypothesis: ExplanationHypothesis
+        self, hypothesis: ExplanationHypothesis
     ) -> Goal | None:
         """Formulate a new goal to resolve the root cause in the explanation."""
         if not hypothesis.suggested_goal_predicate:
@@ -87,5 +84,6 @@ class ExplanationEngine:
             basin_name="metacognitive_repair",
             priority=0.8,  # High priority for GDA goals
         )
+
 
 __all__ = ["ExplanationEngine", "ExplanationHypothesis"]

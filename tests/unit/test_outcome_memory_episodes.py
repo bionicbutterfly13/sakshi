@@ -49,9 +49,7 @@ def test_find_similar_filters_by_outcome_status() -> None:
     mem = GoalOutcomeMemory()
     mem.record(_record("ON", GoalStatus.ACHIEVED, "g-1"))
     mem.record(_record("ON", GoalStatus.ABANDONED, "g-2"))
-    matches = mem.find_similar(
-        predicate_name="ON", outcome_status=GoalStatus.ABANDONED
-    )
+    matches = mem.find_similar(predicate_name="ON", outcome_status=GoalStatus.ABANDONED)
     assert [r.goal_id for r in matches] == ["g-2"]
 
 

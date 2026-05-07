@@ -66,9 +66,7 @@ def test_empty_inputs_rejected() -> None:
     with pytest.raises(ValueError):
         ConfusionWeighter({})
     with pytest.raises(ValueError):
-        ConfusionWeighter(
-            {"a": {"a": 0.0}}, label="ok"
-        ).decide({})
+        ConfusionWeighter({"a": {"a": 0.0}}, label="ok").decide({})
     with pytest.raises(ValueError):
         cost_weighted_argmin({}, {"a": {"a": 0.0}})
     with pytest.raises(ValueError):

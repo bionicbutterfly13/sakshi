@@ -175,9 +175,7 @@ class AnomalyExplainer:
             current = _as_float_map(
                 getattr(anomaly_event, "current_activations", {}) or {}
             )
-            baseline = _as_float_map(
-                getattr(anomaly_event, "baseline_mean", {}) or {}
-            )
+            baseline = _as_float_map(getattr(anomaly_event, "baseline_mean", {}) or {})
             a_distance = float(getattr(anomaly_event, "a_distance", 0.0))
         except Exception as exc:
             logger.warning(
@@ -200,9 +198,7 @@ class AnomalyExplainer:
         # Rank by absolute activation shift across baseline keys.
         keys = sorted(
             set(current.keys()) | set(baseline.keys()),
-            key=lambda k: abs(
-                current.get(k, 0.0) - baseline.get(k, 0.0)
-            ),
+            key=lambda k: abs(current.get(k, 0.0) - baseline.get(k, 0.0)),
             reverse=True,
         )
 

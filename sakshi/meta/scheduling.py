@@ -78,9 +78,7 @@ class OnAnomalyPolicy:
         if anomalies_since_last_run > 0:
             return SchedulingDecision(
                 should_run=True,
-                reason=(
-                    f"{anomalies_since_last_run} anomaly(ies) since last run"
-                ),
+                reason=(f"{anomalies_since_last_run} anomaly(ies) since last run"),
             )
         return SchedulingDecision(should_run=False, reason="no anomalies")
 
@@ -136,8 +134,7 @@ class ThrottledByLoadPolicy:
         return SchedulingDecision(
             should_run=False,
             reason=(
-                f"load {canalization.risk.value} above threshold; "
-                "skipping meta-cycle"
+                f"load {canalization.risk.value} above threshold; skipping meta-cycle"
             ),
         )
 

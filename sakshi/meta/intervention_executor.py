@@ -210,13 +210,9 @@ class InterventionExecutor:
         keep the returned value if they cache the record elsewhere.
         """
         try:
-            index = next(
-                i for i, item in enumerate(self._history) if item is record
-            )
+            index = next(i for i, item in enumerate(self._history) if item is record)
         except StopIteration:
-            logger.warning(
-                "InterventionExecutor.record_outcome: record not in history"
-            )
+            logger.warning("InterventionExecutor.record_outcome: record not in history")
             return record
         updated = InterventionRecord(
             action_type=record.action_type,

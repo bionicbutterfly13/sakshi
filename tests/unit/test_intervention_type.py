@@ -35,9 +35,7 @@ def test_taxonomy_members() -> None:
 
 def test_record_carries_pattern_when_supplied() -> None:
     executor = InterventionExecutor()
-    record = executor.validate(
-        _action(), pattern=InterventionType.WIDEN_SEARCH
-    )
+    record = executor.validate(_action(), pattern=InterventionType.WIDEN_SEARCH)
     assert record.pattern == InterventionType.WIDEN_SEARCH
 
 
@@ -49,9 +47,7 @@ def test_record_pattern_default_is_none() -> None:
 
 def test_record_outcome_preserves_pattern() -> None:
     executor = InterventionExecutor()
-    record = executor.validate(
-        _action(), pattern=InterventionType.DROP_CONFIDENCE
-    )
+    record = executor.validate(_action(), pattern=InterventionType.DROP_CONFIDENCE)
     updated = executor.record_outcome(record, InterventionOutcome.SUCCESS)
     assert updated.pattern == InterventionType.DROP_CONFIDENCE
     assert updated.outcome == InterventionOutcome.SUCCESS

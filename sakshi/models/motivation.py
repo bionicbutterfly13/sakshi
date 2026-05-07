@@ -172,9 +172,7 @@ def evaluate_envelope(
     if motivation_type in envelope.forbidden_motivation_types:
         return EnvelopeVerdict(
             accepted=False,
-            reason=(
-                f"{motivation_type.value} motivation forbidden by envelope"
-            ),
+            reason=(f"{motivation_type.value} motivation forbidden by envelope"),
             violated_field="motivation_type",
         )
     if (
@@ -183,9 +181,7 @@ def evaluate_envelope(
     ):
         return EnvelopeVerdict(
             accepted=False,
-            reason=(
-                f"predicate {predicate_name!r} not in allowed list"
-            ),
+            reason=(f"predicate {predicate_name!r} not in allowed list"),
             violated_field="predicate_name",
         )
     if not 0.0 <= novelty_score <= 1.0:
@@ -204,10 +200,7 @@ def evaluate_envelope(
             if forbidden in predicate_args:
                 return EnvelopeVerdict(
                     accepted=False,
-                    reason=(
-                        f"goal contains forbidden attribute "
-                        f"{forbidden!r}"
-                    ),
+                    reason=(f"goal contains forbidden attribute {forbidden!r}"),
                     violated_field=forbidden,
                 )
     return EnvelopeVerdict.ok()

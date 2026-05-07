@@ -232,9 +232,7 @@ def make_audit_record(
     """Build a frozen audit record from a guard verdict."""
     metadata_tuple: tuple[tuple[str, str], ...] = ()
     if metadata:
-        metadata_tuple = tuple(
-            (str(k), str(v)) for k, v in sorted(metadata.items())
-        )
+        metadata_tuple = tuple((str(k), str(v)) for k, v in sorted(metadata.items()))
     return GuardAuditRecord(
         guard_name=guard_name,
         target=target,

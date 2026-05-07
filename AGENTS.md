@@ -23,6 +23,7 @@ This file is the short entry point for coding agents. It is a map, not a full ma
 
 - Keep package code free of host runtime imports. `sakshi/` MUST NOT import `api.*`, FastAPI, Graphiti, Neo4j, smolagents, or a host service getter.
 - Keep public identifiers product-native. Do not use external reference-architecture names in package names, import paths, class names, function names, or primary docs headings.
+- Preserve formal package attribution. Author, maintainer, citation, and copyright/notice metadata are the correct places for developer credit; do not treat that credit as contamination. Keep personal/private-project references out of code and narrative docs unless they are part of formal attribution metadata.
 - Host integrations belong behind protocols. If code needs a runtime service, define or reuse a protocol and let the host adapter implement it.
 - Do not add module-global singleton getters in package code. Hosts own construction and lifecycle.
 - Keep changes narrow. Do not combine extraction, public API redesign, and host rewiring in one commit.

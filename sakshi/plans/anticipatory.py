@@ -142,9 +142,7 @@ class AnticipatoryRiskScorer:
         expected_benefit: float = 0.5,
         notes: str = "",
     ) -> PlanRiskAssessment:
-        risks = tuple(
-            self._risk_model.identify(plan_id, plan_steps, world_state)
-        )
+        risks = tuple(self._risk_model.identify(plan_id, plan_steps, world_state))
         score = aggregate_risk_score(risks, expected_benefit=expected_benefit)
         band = classify_band(score)
         return PlanRiskAssessment(

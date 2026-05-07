@@ -33,10 +33,14 @@ if rg -n '^# .*MIDCA|^## .*MIDCA|^### .*MIDCA' README.md docs sakshi tests >/tmp
   fail "primary headings contain forbidden external reference names"
 fi
 
+# Formal package attribution belongs in pyproject.toml, CITATION.cff, and NOTICE.
+# Do not interpret this rule as forbidding author, maintainer, citation, or
+# copyright/notice metadata. It only blocks personal/private-project terms in
+# code and narrative docs where they would blur the public package boundary.
 if rg -n -i '\b(Mani|Saint-Victor|Hexis|IAS|HBD|DGAF|Bergerac|Vigilant Sentinel|Analytical Empath|MEMORY_MANIFESTO|Ralph|Archon|Conductor|DrMani)\b' \
-  sakshi tests README.md INSPIRATION.md CONTRIBUTING.md CHANGELOG.md pyproject.toml docs AGENTS.md >/tmp/sakshi_hygiene_hits.txt; then
+  sakshi tests README.md INSPIRATION.md CONTRIBUTING.md CHANGELOG.md docs AGENTS.md >/tmp/sakshi_hygiene_hits.txt; then
   cat /tmp/sakshi_hygiene_hits.txt >&2
-  fail "published package surface contains personal attribution or private-project terms"
+  fail "code or narrative docs contain personal attribution or private-project terms outside formal attribution metadata"
 fi
 
 rm -f /tmp/sakshi_hygiene_hits.txt

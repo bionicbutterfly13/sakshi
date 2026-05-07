@@ -7,9 +7,7 @@ from sakshi.models import ControlActionType, FailureMode
 
 
 def test_explicit_trap_marker_in_description() -> None:
-    fm = FailureMode(
-        name="x", description="this is a trap:reasoning failure"
-    )
+    fm = FailureMode(name="x", description="this is a trap:reasoning failure")
     assert classify_failure_mode(fm) == TRAPDimension.REASONING
 
 
@@ -44,17 +42,13 @@ def test_unclassified_when_no_signal() -> None:
 
 def test_router_default_routing() -> None:
     router = TRAPRouter()
-    assert (
-        router.recommend(TRAPDimension.REASONING)
-        == ControlActionType.SWAP_MODULE
-    )
+    assert router.recommend(TRAPDimension.REASONING) == ControlActionType.SWAP_MODULE
     assert (
         router.recommend(TRAPDimension.PERCEPTION)
         == ControlActionType.STRENGTHEN_MODULE
     )
     assert (
-        router.recommend(TRAPDimension.ADAPTATION)
-        == ControlActionType.ADJUST_PRECISION
+        router.recommend(TRAPDimension.ADAPTATION) == ControlActionType.ADJUST_PRECISION
     )
     assert (
         router.recommend(TRAPDimension.TRANSPARENCY)
@@ -65,10 +59,7 @@ def test_router_default_routing() -> None:
 
 def test_router_custom_routing() -> None:
     router = TRAPRouter({TRAPDimension.REASONING: ControlActionType.REPLACE_MODULE})
-    assert (
-        router.recommend(TRAPDimension.REASONING)
-        == ControlActionType.REPLACE_MODULE
-    )
+    assert router.recommend(TRAPDimension.REASONING) == ControlActionType.REPLACE_MODULE
     # Unmodified entries fall back to the default mapping.
     assert (
         router.recommend(TRAPDimension.PERCEPTION)

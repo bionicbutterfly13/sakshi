@@ -80,9 +80,7 @@ class GoalLineageAuditor:
         if depth_warn_threshold < 1:
             raise ValueError("depth_warn_threshold must be at least 1")
         if depth_drift_threshold <= depth_warn_threshold:
-            raise ValueError(
-                "depth_drift_threshold must exceed depth_warn_threshold"
-            )
+            raise ValueError("depth_drift_threshold must exceed depth_warn_threshold")
         self._warn = depth_warn_threshold
         self._drift = depth_drift_threshold
         self._widening = set(widening_transforms)

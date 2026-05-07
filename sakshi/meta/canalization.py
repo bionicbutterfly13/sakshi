@@ -105,9 +105,7 @@ def metrics_from_static_cycles(
         raise ValueError("max_history must be positive")
     depth = min(1.0, max(0.0, static_cycles / max_history))
     if perturbation_capacity > 0:
-        resistance = min(
-            1.0, max(0.0, perturbation_count / perturbation_capacity)
-        )
+        resistance = min(1.0, max(0.0, perturbation_count / perturbation_capacity))
     else:
         resistance = 0.0
     dwell = max(0, static_cycles)

@@ -68,9 +68,7 @@ def test_transition_without_to_mode_keeps_mode() -> None:
 
 def test_goal_serialises_transitions() -> None:
     goal = _make_goal()
-    goal.record_transition(
-        event_type=GoalEventType.SELECTED, to_mode=GoalMode.SELECTED
-    )
+    goal.record_transition(event_type=GoalEventType.SELECTED, to_mode=GoalMode.SELECTED)
     payload = goal.model_dump()
     rebuilt = Goal.model_validate(payload)
     assert len(rebuilt.transitions) == 1

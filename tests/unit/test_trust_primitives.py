@@ -22,12 +22,8 @@ def test_aggregate_penalizes_either_axis() -> None:
     competent_only = TrustBifurcation(
         competence_confidence=0.9, integrity_confidence=0.1
     )
-    intact_only = TrustBifurcation(
-        competence_confidence=0.1, integrity_confidence=0.9
-    )
-    balanced = TrustBifurcation(
-        competence_confidence=0.7, integrity_confidence=0.7
-    )
+    intact_only = TrustBifurcation(competence_confidence=0.1, integrity_confidence=0.9)
+    balanced = TrustBifurcation(competence_confidence=0.7, integrity_confidence=0.7)
     assert competent_only.aggregate < balanced.aggregate
     assert intact_only.aggregate < balanced.aggregate
 
@@ -58,9 +54,7 @@ def test_trust_report_full_round_trip() -> None:
     original = TrustReport(
         cycle_id="c-1",
         subject="anomaly:event-7",
-        trust=TrustBifurcation(
-            competence_confidence=0.85, integrity_confidence=0.9
-        ),
+        trust=TrustBifurcation(competence_confidence=0.85, integrity_confidence=0.9),
         uncertainty_type=UncertaintyType.AMBIGUITY,
         competing_hypothesis_labels=("model_a", "model_b"),
         calibration_status="well_calibrated",

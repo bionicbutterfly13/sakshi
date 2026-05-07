@@ -87,10 +87,7 @@ class GoalOutcomeMemory:
         for record in reversed(self._records):
             if record.predicate_name != predicate_name:
                 continue
-            if (
-                outcome_status is not None
-                and record.outcome_status != outcome_status
-            ):
+            if outcome_status is not None and record.outcome_status != outcome_status:
                 continue
             results.append(record)
             if len(results) >= limit:
@@ -111,15 +108,11 @@ class GoalOutcomeMemory:
         if predicate_name is None:
             records = self._records
         else:
-            records = [
-                r for r in self._records if r.predicate_name == predicate_name
-            ]
+            records = [r for r in self._records if r.predicate_name == predicate_name]
         records = list(records)
         if not records:
             return 0.0
-        achieved = sum(
-            1 for r in records if r.outcome_status == GoalStatus.ACHIEVED
-        )
+        achieved = sum(1 for r in records if r.outcome_status == GoalStatus.ACHIEVED)
         return achieved / len(records)
 
     def clear(self) -> None:

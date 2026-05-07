@@ -21,8 +21,9 @@ releases may break public API in any minor version.
   Open).
 
 ### Changed
-- Version cut from 0.9.0a0 alpha-tag to 0.9.0 once Phases A through
-  G shipped on main with all 198 tests green.
+- Version cut from 0.9.0a0 to 0.9.0 once Phases A through G shipped
+  with release metadata synchronized and the full local quality gate
+  green.
 
 ## [0.9.0a0] - 2026-05-07
 

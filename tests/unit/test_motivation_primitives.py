@@ -107,9 +107,7 @@ def test_relevance_filter_rejects_disjoint_tags() -> None:
 
 def test_relevance_filter_requires_tags_when_configured() -> None:
     permissive = GoalRelevanceFilter(allowed_value_tags=("safety",))
-    strict = GoalRelevanceFilter(
-        allowed_value_tags=("safety",), require_value_tag=True
-    )
+    strict = GoalRelevanceFilter(allowed_value_tags=("safety",), require_value_tag=True)
     assert permissive.evaluate(()).accepted is True
     assert strict.evaluate(()).accepted is False
 
@@ -125,13 +123,9 @@ def test_auditor_records_and_metrics_empty() -> None:
 def test_auditor_metrics_diversity_and_risk() -> None:
     auditor = MotivationAuditor()
     for _ in range(4):
-        auditor.record(
-            MotivationEvent(motivation_type=MotivationType.ACHIEVEMENT)
-        )
+        auditor.record(MotivationEvent(motivation_type=MotivationType.ACHIEVEMENT))
     for _ in range(4):
-        auditor.record(
-            MotivationEvent(motivation_type=MotivationType.POWER)
-        )
+        auditor.record(MotivationEvent(motivation_type=MotivationType.POWER))
     metrics = auditor.metrics()
     assert 0.9 < metrics.diversity_score <= 1.0
     assert metrics.risk_assessment == 0.5
@@ -140,19 +134,13 @@ def test_auditor_metrics_diversity_and_risk() -> None:
 def test_auditor_acceptance_rate() -> None:
     auditor = MotivationAuditor()
     auditor.record(
-        MotivationEvent(
-            motivation_type=MotivationType.ACHIEVEMENT, accepted=True
-        )
+        MotivationEvent(motivation_type=MotivationType.ACHIEVEMENT, accepted=True)
     )
     auditor.record(
-        MotivationEvent(
-            motivation_type=MotivationType.ACHIEVEMENT, accepted=False
-        )
+        MotivationEvent(motivation_type=MotivationType.ACHIEVEMENT, accepted=False)
     )
     auditor.record(
-        MotivationEvent(
-            motivation_type=MotivationType.ACHIEVEMENT, accepted=True
-        )
+        MotivationEvent(motivation_type=MotivationType.ACHIEVEMENT, accepted=True)
     )
     assert auditor.acceptance_rate() == pytest.approx(2 / 3)
 

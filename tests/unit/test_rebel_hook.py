@@ -62,6 +62,7 @@ def test_decision_is_frozen() -> None:
     import dataclasses
 
     import pytest
+
     decision = RebelDecision.accept(_goal())
     with pytest.raises(dataclasses.FrozenInstanceError):
         decision.reason = "changed"  # type: ignore[misc]

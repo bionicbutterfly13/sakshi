@@ -134,9 +134,7 @@ class TRAPRouter:
         self,
         routing: Mapping[TRAPDimension, ControlActionType] | None = None,
     ) -> None:
-        self._routing: dict[TRAPDimension, ControlActionType] = dict(
-            _DEFAULT_ROUTING
-        )
+        self._routing: dict[TRAPDimension, ControlActionType] = dict(_DEFAULT_ROUTING)
         if routing is not None:
             self._routing.update(routing)
 

@@ -6,7 +6,7 @@ A metacognitive runtime for Python agents: the Witness pattern. A watching proce
 
 ## Status
 
-**0.2.0 alpha.** First version verified end-to-end against a host integration. The public API may still change in 0.x minor releases. Approaching a 1.0 freeze; not yet recommended for unverified production use.
+**0.9.0 pre-1.0.** The typed Witness surface is present and package-local tests cover the main DTO, goal, plan, interpret, meta, motivation, and guard primitives. The public API may still change in 0.x minor releases; production hosts must verify their adapters before relying on a new minor version.
 
 > ⚠ **The defaults are inert.** `NoOpEventBus`, `NoOpBasinHook`, and `AlwaysPermitWriteGuard` are intentional no-ops for tests and the quickstart below. A production host **must** inject real implementations of `EventBus`, `GoalStateStore`, and `WriteGuard` — otherwise events drop on the floor, world state never resolves, and every Sakshi-originated write is silently permitted. See `sakshi.protocols` for the interfaces and your host's adapter layer for examples.
 

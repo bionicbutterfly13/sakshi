@@ -56,9 +56,7 @@ class MotivationAuditor:
     ) -> list[MotivationEvent]:
         """Return events of the given motivation type, oldest first."""
         return [
-            event
-            for event in self._events
-            if event.motivation_type == motivation_type
+            event for event in self._events if event.motivation_type == motivation_type
         ]
 
     def acceptance_rate(self) -> float:

@@ -26,9 +26,7 @@ def test_reward_guard_protocol_runtime_check() -> None:
 
 def test_reward_guard_permits_with_evidence() -> None:
     guard = EvidenceRequiringRewardIntegrityGuard(min_evidence=1)
-    verdict = guard.validate_achievement(
-        goal_id="g-1", evidence_keys=("sensor:cam_1",)
-    )
+    verdict = guard.validate_achievement(goal_id="g-1", evidence_keys=("sensor:cam_1",))
     assert verdict.decision == GuardDecision.PERMIT
     assert verdict.evidence_count == 1
 

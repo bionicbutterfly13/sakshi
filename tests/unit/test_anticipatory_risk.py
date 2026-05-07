@@ -24,9 +24,7 @@ def test_plan_risk_validates() -> None:
 
 
 def test_severity() -> None:
-    risk = PlanRisk(
-        step_name="s", description="x", likelihood=0.5, impact=0.4
-    )
+    risk = PlanRisk(step_name="s", description="x", likelihood=0.5, impact=0.4)
     assert risk.severity == pytest.approx(0.2)
 
 

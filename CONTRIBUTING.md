@@ -1,6 +1,6 @@
 # Contributing
 
-Sakshi is in early experimental development. The public API is subject to breaking change without notice in 0.x releases.
+Sakshi is in pre-1.0 development. The public API is usable for host-adapter work, but 0.x minor releases may still include breaking changes.
 
 ## Running tests
 
