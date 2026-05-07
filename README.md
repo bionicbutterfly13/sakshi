@@ -6,7 +6,7 @@ A metacognitive runtime for Python agents: the Witness pattern. A watching proce
 
 ## Status
 
-**0.9.0 pre-1.0.** The typed Witness surface is present and package-local tests cover the main DTO, goal, plan, interpret, meta, motivation, and guard primitives. The public API may still change in 0.x minor releases; production hosts must verify their adapters before relying on a new minor version.
+**0.10.0 pre-1.0.** The typed Witness surface is present and package-local tests cover the main DTO, goal, plan, interpret, meta, motivation, trust, uncertainty, and guard primitives. The public API may still change in 0.x minor releases; production hosts must verify their adapters before relying on a new minor version.
 
 > ⚠ **The defaults are inert.** `NoOpEventBus`, `NoOpBasinHook`, and `AlwaysPermitWriteGuard` are intentional no-ops for tests and the quickstart below. A production host **must** inject real implementations of `EventBus`, `GoalStateStore`, and `WriteGuard` — otherwise events drop on the floor, world state never resolves, and every Sakshi-originated write is silently permitted. See `sakshi.protocols` for the interfaces and your host's adapter layer for examples.
 
@@ -35,6 +35,19 @@ pip install git+https://github.com/bionicbutterfly13/sakshi
 Release process: see [`docs/release-checklist.md`](docs/release-checklist.md).
 
 ## What it is
+
+The Witness pattern means the host keeps control of cognition while Sakshi
+observes it through typed seams. The host owns the planner, memory system,
+tool runtime, world model, and side effects. Sakshi receives declared
+expectations and runtime records, checks what happened against those
+expectations, and emits typed signals a host can route to dashboards, gates,
+audits, or meta-control policies.
+
+That boundary is useful because it makes an agent inspectable without making
+Sakshi the agent's brain. Hosts can add contract monitoring, confidence
+calibration, goal lineage, motivation envelopes, risk records, trust repair
+recommendations, and defensive guards while keeping their domain logic and
+runtime dependencies outside the package.
 
 Sakshi exposes a small, opinionated set of seams a host application supplies:
 

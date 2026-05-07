@@ -2,6 +2,22 @@
 
 Sakshi is a metacognitive runtime library. It exposes protocol seams and pure core logic; host applications provide concrete runtime services.
 
+## Witness Pattern
+
+The Witness pattern is Sakshi's main architectural boundary: Sakshi observes a
+host agent's cognition without becoming the host's cognition. The host owns
+planning, memory, tools, world modeling, motivation generation, and side
+effects. Sakshi owns typed observation seams, expectation checks, audit records,
+and small decision helpers that let the host decide what to do next.
+
+This makes the runtime useful in production because it adds inspectability and
+governance without forcing a host to adopt Sakshi as its agent framework. A
+host can declare module expectations, tag anomalies, record goal operations,
+calibrate confidence, report trust and uncertainty, gate motivation, and verify
+achievement or self-modification claims through one deterministic package-local
+surface. When a feature would require Sakshi to simulate the host's beliefs or
+choose the host's domain strategy, it belongs in the host adapter instead.
+
 ## Layers
 
 Package dependencies should flow in this direction:

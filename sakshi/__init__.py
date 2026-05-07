@@ -115,7 +115,7 @@ from sakshi.protocols import (
 )
 from sakshi.registries import PhaseRegistry
 
-__version__ = "0.9.0"
+__version__ = "0.10.0"
 
 __all__ = [
     "AcceptingRebelHook",

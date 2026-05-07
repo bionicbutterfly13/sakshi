@@ -7,6 +7,8 @@ releases may break public API in any minor version.
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-05-07
+
 ### Added
 - `models.UncertaintyBoundary` — typed boundary classifier that
   distinguishes stochastic, ambiguous, ignorant, epistemic, and
@@ -15,6 +17,10 @@ releases may break public API in any minor version.
 - `models.TrustRepairAction` and `models.TrustRepairRecommendation` —
   typed trust-repair recommendations that can be attached to
   `TrustReport` without executing repair inside Sakshi.
+- README and architecture documentation now define the Witness pattern
+  directly: Sakshi observes host cognition through typed seams while the
+  host retains ownership of planning, memory, tools, world modeling,
+  motivation generation, and side effects.
 
 ## [0.9.0] - 2026-05-07
 
