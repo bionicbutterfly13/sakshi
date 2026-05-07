@@ -60,6 +60,28 @@ class InterventionOutcome(StrEnum):
     UNKNOWN = "unknown"
 
 
+class InterventionType(StrEnum):
+    """Pattern-level label for what kind of intervention is happening.
+
+    Independent of the mechanism-level ``ControlActionType`` (which
+    answers "what action did the meta-cycle emit"). The pattern
+    label answers "what was the meta-cycle trying to accomplish."
+    A single ``ADJUST_PRECISION`` action can implement
+    ``DROP_CONFIDENCE`` or ``WIDEN_SEARCH`` depending on the precision
+    delta sign; the pattern label makes that intent explicit in audit
+    records.
+    """
+
+    PAUSE_AND_REEVALUATE = "pause_and_reevaluate"
+    DROP_CONFIDENCE = "drop_confidence"
+    WIDEN_SEARCH = "widen_search"
+    RELAX_GOAL = "relax_goal"
+    FLUSH_MEMORY = "flush_memory"
+    TRIGGER_EXPLORATION = "trigger_exploration"
+    SUSPEND_RECOVERY = "suspend_recovery"
+    ESCALATE_TO_OPERATOR = "escalate_to_operator"
+
+
 @dataclass(frozen=True)
 class InterventionRecord:
     """One entry in the executor's audit trail."""
@@ -69,6 +91,7 @@ class InterventionRecord:
     decision: InterventionDecision
     reason: str = ""
     outcome: InterventionOutcome = InterventionOutcome.UNKNOWN
+    pattern: InterventionType | None = None
     occurred_at: datetime = field(default_factory=lambda: datetime.now(UTC))
 
 
@@ -134,9 +157,15 @@ class InterventionExecutor:
         self,
         action: ControlAction,
         *,
+        pattern: InterventionType | None = None,
         now: datetime | None = None,
     ) -> InterventionRecord:
-        """Decide whether to permit ``action`` and append a record."""
+        """Decide whether to permit ``action`` and append a record.
+
+        ``pattern`` is the optional pattern-level label describing what
+        the meta-cycle was trying to accomplish (independent of the
+        mechanism-level ``action.action_type``).
+        """
         timestamp = now or datetime.now(UTC)
 
         # Cooldown check first — cheaper than calling host policy.
@@ -152,6 +181,7 @@ class InterventionExecutor:
                         f"emitted {elapsed.total_seconds():.1f}s ago "
                         f"(cooldown {self._cooldown.total_seconds():.1f}s)"
                     ),
+                    pattern=pattern,
                     timestamp=timestamp,
                 )
 
@@ -165,6 +195,7 @@ class InterventionExecutor:
             action,
             decision=decision,
             reason=reason,
+            pattern=pattern,
             timestamp=timestamp,
         )
 
@@ -193,6 +224,7 @@ class InterventionExecutor:
             decision=record.decision,
             reason=record.reason,
             outcome=outcome,
+            pattern=record.pattern,
             occurred_at=record.occurred_at,
         )
         # deque does not support direct index assignment of a single
@@ -210,12 +242,14 @@ class InterventionExecutor:
         decision: InterventionDecision,
         reason: str,
         timestamp: datetime,
+        pattern: InterventionType | None = None,
     ) -> InterventionRecord:
         record = InterventionRecord(
             action_type=action.action_type,
             target=action.target,
             decision=decision,
             reason=reason,
+            pattern=pattern,
             occurred_at=timestamp,
         )
         self._history.append(record)
@@ -254,4 +288,5 @@ __all__ = [
     "InterventionOutcome",
     "InterventionPermissionPolicy",
     "InterventionRecord",
+    "InterventionType",
 ]

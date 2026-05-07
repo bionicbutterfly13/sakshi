@@ -147,6 +147,117 @@ class AnomalyExplainer:
                 confidence=0.3,
             )
 
+    async def explain_distribution(
+        self,
+        anomaly_event: object,
+        *,
+        anomaly_history: Iterable[Mapping[str, Any] | object] | None = None,
+        goal_graph: GoalGraph | None = None,
+        basin_profile_provider: BasinProfileProvider | None = None,
+        top_k: int = 3,
+    ) -> list[AnomalyExplanation]:
+        """Return up to ``top_k`` ranked competing hypotheses.
+
+        Where ``explain`` collapses to the single most-shifted key,
+        this method returns several candidate explanations — one per
+        meaningfully shifted key, sorted by descending confidence.
+
+        The shape lets a meta-cycle hedge across competing diagnoses:
+        a ``SWAP_MODULE`` action on the top-1 hypothesis is sound only
+        when its confidence exceeds the runner-up by a comfortable
+        margin; otherwise the host should defer or gather more
+        evidence.
+        """
+        if top_k < 1:
+            raise ValueError("top_k must be at least 1")
+
+        try:
+            current = _as_float_map(
+                getattr(anomaly_event, "current_activations", {}) or {}
+            )
+            baseline = _as_float_map(
+                getattr(anomaly_event, "baseline_mean", {}) or {}
+            )
+            a_distance = float(getattr(anomaly_event, "a_distance", 0.0))
+        except Exception as exc:
+            logger.warning(
+                "AnomalyExplainer.explain_distribution failed early "
+                "(%s: %s); returning empty distribution",
+                type(exc).__name__,
+                exc,
+            )
+            return []
+
+        if not current or not baseline:
+            single = await self.explain(
+                anomaly_event,
+                anomaly_history=anomaly_history,
+                goal_graph=goal_graph,
+                basin_profile_provider=basin_profile_provider,
+            )
+            return [single]
+
+        # Rank by absolute activation shift across baseline keys.
+        keys = sorted(
+            set(current.keys()) | set(baseline.keys()),
+            key=lambda k: abs(
+                current.get(k, 0.0) - baseline.get(k, 0.0)
+            ),
+            reverse=True,
+        )
+
+        explanations: list[AnomalyExplanation] = []
+        for anomaly_class in keys[:top_k]:
+            try:
+                recurrence_count = await self._count_recurrences(
+                    anomaly_class,
+                    anomaly_history=anomaly_history,
+                )
+                prior_resolution, prior_goal_id = self._lookup_prior_resolution(
+                    anomaly_class,
+                    goal_graph=goal_graph,
+                )
+                profile = self._get_basin_profile(
+                    anomaly_class,
+                    basin_profile_provider=basin_profile_provider,
+                )
+                hypothesis = self._build_hypothesis(
+                    anomaly_class=anomaly_class,
+                    recurrence_count=recurrence_count,
+                    prior_resolution=prior_resolution,
+                    basin_stability=profile.stability,
+                    a_distance=a_distance,
+                )
+                confidence = self._compute_confidence(
+                    recurrence_count=recurrence_count,
+                    prior_resolution=prior_resolution,
+                    basin_stability=profile.stability,
+                )
+                explanations.append(
+                    AnomalyExplanation(
+                        anomaly_class=anomaly_class,
+                        recurrence_count=recurrence_count,
+                        prior_resolution=prior_resolution,
+                        prior_goal_id=prior_goal_id,
+                        basin_stability=profile.stability,
+                        basin_strength=profile.strength,
+                        is_novel=recurrence_count == 0,
+                        hypothesis=hypothesis,
+                        confidence=confidence,
+                    )
+                )
+            except Exception as exc:
+                logger.warning(
+                    "AnomalyExplainer.explain_distribution: skipping "
+                    "candidate %r (%s: %s)",
+                    anomaly_class,
+                    type(exc).__name__,
+                    exc,
+                )
+
+        explanations.sort(key=lambda e: e.confidence, reverse=True)
+        return explanations
+
     async def _count_recurrences(
         self,
         anomaly_class: str,

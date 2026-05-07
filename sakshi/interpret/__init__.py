@@ -28,6 +28,7 @@ from sakshi.interpret.lineage import (
     LineageReport,
     LineageVerdict,
 )
+from sakshi.interpret.trap import TRAPDimension, TRAPRouter, classify_failure_mode
 
 __all__ = [
     "ADistanceDetector",
@@ -51,5 +52,8 @@ __all__ = [
     "LineageReport",
     "LineageVerdict",
     "PredicateStream",
+    "TRAPDimension",
+    "TRAPRouter",
+    "classify_failure_mode",
     "compute_a_distance",
 ]

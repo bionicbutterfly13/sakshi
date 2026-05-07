@@ -7,6 +7,60 @@ releases may break public API in any minor version.
 
 ## [Unreleased]
 
+## [0.6.0a0] - 2026-05-07
+
+### Added
+- `meta.MetaSchedulingPolicy` protocol — host-pluggable rule for
+  whether to run the meta-cycle on the current iteration. Three
+  defaults ship: `EveryCyclePolicy`, `OnAnomalyPolicy`,
+  `ThrottledByLoadPolicy(max_run_risk=..., always_run_on_anomaly=...)`.
+  The throttled policy reads `CanalizationMetrics` directly and skips
+  expensive meta-runs when load is pathological, with a configurable
+  anomaly override.
+- `meta.DeliberationGate` — pure threshold function that decides
+  between routine and deliberative reasoning paths given current
+  confidence, recent failure rate, and remaining budget. Returns a
+  typed `DeliberationDecision`. Conservative default: routine path
+  unless confidence is below 0.6 *or* failure rate above 0.4 *and*
+  budget is above the floor.
+- `goals.RebelHook` protocol — pre-INTEND gate where the meta-layer
+  evaluates an assigned goal against expectations and returns
+  `RebelDecision.accept`, `RebelDecision.rewrite`, or
+  `RebelDecision.reject`. Default `AcceptingRebelHook` is fully
+  backward-compatible; production hosts inject their own.
+- `plans.AnticipatoryRiskScorer` — three-step risk pipeline (identify
+  via `RiskModel`, aggregate, classify into `RiskBand`). Returns a
+  frozen `PlanRiskAssessment`. Pure functions: `aggregate_risk_score`
+  and `classify_band` are exposed for hosts that want only one step.
+- `meta.InterventionType` enum — pattern-level taxonomy of eight
+  named interventions (`PAUSE_AND_REEVALUATE`, `DROP_CONFIDENCE`,
+  `WIDEN_SEARCH`, `RELAX_GOAL`, `FLUSH_MEMORY`, `TRIGGER_EXPLORATION`,
+  `SUSPEND_RECOVERY`, `ESCALATE_TO_OPERATOR`). `InterventionRecord`
+  now carries an optional `pattern` field; `InterventionExecutor.validate`
+  accepts a `pattern=` keyword.
+- `interpret.TRAPDimension` enum (Transparency, Reasoning, Adaptation,
+  Perception, Unclassified) plus `classify_failure_mode` and
+  `TRAPRouter`. Tags `FailureMode` records along the four-axis
+  taxonomy and recommends a default `ControlActionType` per axis,
+  overridable per host.
+- `goals.AnomalyExplainer.explain_distribution` — returns up to
+  ``top_k`` ranked competing hypotheses instead of collapsing to one.
+  Lets the meta-cycle hedge across competing diagnoses when the
+  top-1 confidence does not exceed the runner-up by a comfortable
+  margin.
+
+### Notes
+- `OptimalityMeasure` (originally proposed in the roadmap) was
+  audited against the existing `GoalSelector` + `ModSelectionCriteria`
+  seam in `goals/selector.py` and judged redundant. The existing
+  `criteria` constructor argument already supports pluggable scoring;
+  hosts that want Bayesian / Thompson / etc. policies subclass
+  `ModSelectionCriteria` directly.
+- `EmergenceBound` (originally proposed) deferred. The Type I-IV
+  classification is multi-agent-flavored and Sakshi is single-agent
+  by default; hosts that build multi-agent adapters can introduce the
+  classifier in their adapter layer.
+
 ## [0.5.0a0] - 2026-05-07
 
 ### Added

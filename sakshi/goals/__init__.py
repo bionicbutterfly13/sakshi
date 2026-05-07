@@ -25,6 +25,12 @@ from sakshi.goals.graph import (
 from sakshi.goals.monitor import GoalMonitor, GoalMonitorResult
 from sakshi.goals.outcome_closure import GoalOutcomeClosureService
 from sakshi.goals.outcome_memory import GoalOutcomeMemory
+from sakshi.goals.rebel import (
+    AcceptingRebelHook,
+    RebelDecision,
+    RebelHook,
+    RebelVerdict,
+)
 from sakshi.goals.selector import GoalSelector, ModSelectionCriteria
 from sakshi.goals.transformer import GoalTransformer, TransformType
 from sakshi.goals.validator import (
@@ -36,6 +42,7 @@ from sakshi.goals.validator import (
 __all__ = [
     "DEFAULT_PARENT_COUPLING",
     "MAX_COUPLING_BASINS",
+    "AcceptingRebelHook",
     "DomainRegistry",
     "GoalEdge",
     "AnomalyExplainer",
@@ -53,6 +60,9 @@ __all__ = [
     "GoalValidationResult",
     "GoalValidator",
     "ModSelectionCriteria",
+    "RebelDecision",
+    "RebelHook",
+    "RebelVerdict",
     "TransformType",
     "find_most_shifted_key",
     "severity_to_priority",

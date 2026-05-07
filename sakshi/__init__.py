@@ -16,6 +16,12 @@ from sakshi.errors import (
     SakshiError,
     WorldStateUnavailableError,
 )
+from sakshi.goals import (
+    AcceptingRebelHook,
+    RebelDecision,
+    RebelHook,
+    RebelVerdict,
+)
 from sakshi.interpret import (
     CalibrationReport,
     CalibrationTracker,
@@ -24,16 +30,28 @@ from sakshi.interpret import (
     GoalLineageAuditor,
     LineageReport,
     LineageVerdict,
+    TRAPDimension,
+    TRAPRouter,
+    classify_failure_mode,
 )
 from sakshi.meta import (
     AlwaysPermitPolicy,
     CanalizationMetrics,
     CanalizationRisk,
+    DeliberationDecision,
+    DeliberationGate,
+    DeliberationPath,
+    EveryCyclePolicy,
     InterventionDecision,
     InterventionExecutor,
     InterventionOutcome,
     InterventionPermissionPolicy,
     InterventionRecord,
+    InterventionType,
+    MetaSchedulingPolicy,
+    OnAnomalyPolicy,
+    SchedulingDecision,
+    ThrottledByLoadPolicy,
 )
 from sakshi.models import (
     AnomalySourceType,
@@ -51,7 +69,16 @@ from sakshi.models import (
     StatusTransparency,
     TransparencyLevel,
 )
-from sakshi.plans import Action, GoalConstraint, TaskDecomposer
+from sakshi.plans import (
+    Action,
+    AnticipatoryRiskScorer,
+    GoalConstraint,
+    PlanRisk,
+    PlanRiskAssessment,
+    RiskBand,
+    RiskModel,
+    TaskDecomposer,
+)
 from sakshi.protocols import (
     AlwaysPermitWriteGuard,
     BasinHook,
@@ -64,14 +91,16 @@ from sakshi.protocols import (
 )
 from sakshi.registries import PhaseRegistry
 
-__version__ = "0.5.0a0"
+__version__ = "0.6.0a0"
 
 __all__ = [
+    "AcceptingRebelHook",
     "Action",
     "AlwaysPermitPolicy",
     "AlwaysPermitWriteGuard",
     "AnomalyEscalationError",
     "AnomalySourceType",
+    "AnticipatoryRiskScorer",
     "BasinHook",
     "CalibrationReport",
     "CalibrationTracker",
@@ -80,8 +109,12 @@ __all__ = [
     "CanalizationRisk",
     "Clock",
     "ConfidenceObservation",
+    "DeliberationDecision",
+    "DeliberationGate",
+    "DeliberationPath",
     "DiscrepancyResolution",
     "EventBus",
+    "EveryCyclePolicy",
     "ExpectationProfile",
     "FailureMode",
     "GoalConstraint",
@@ -98,25 +131,40 @@ __all__ = [
     "InterventionOutcome",
     "InterventionPermissionPolicy",
     "InterventionRecord",
+    "InterventionType",
     "LastNPruner",
     "LineageReport",
     "LineageVerdict",
+    "MetaSchedulingPolicy",
     "NoOpBasinHook",
     "NoOpEventBus",
+    "OnAnomalyPolicy",
     "PhaseRegistry",
     "PhaseTransitionError",
+    "PlanRisk",
+    "PlanRiskAssessment",
     "PlanSoundnessError",
     "ProjectionTransparency",
     "ReasoningTransparency",
+    "RebelDecision",
+    "RebelHook",
+    "RebelVerdict",
     "ResolutionLevel",
+    "RiskBand",
+    "RiskModel",
     "SakshiError",
+    "SchedulingDecision",
     "SinceAnomalyPruner",
     "StatusTransparency",
+    "TRAPDimension",
+    "TRAPRouter",
     "TaskDecomposer",
+    "ThrottledByLoadPolicy",
     "TracePruner",
     "TransparencyLevel",
     "WhereExpectationFiredPruner",
     "WorldStateUnavailableError",
     "WriteGuard",
     "__version__",
+    "classify_failure_mode",
 ]

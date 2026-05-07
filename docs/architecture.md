@@ -147,6 +147,46 @@ A host that sees a warning at the 0.9 decile can widen the `confidence_range` on
 
 The store is a record log, not a learning system. Hosts that want strategy-level adaptation read these and decide.
 
+## Meta-cycle scheduling
+
+`MetaSchedulingPolicy` decides whether to run the meta-cycle this iteration. Three defaults ship:
+
+- `EveryCyclePolicy` — backward-compatible default; run on every cycle.
+- `OnAnomalyPolicy` — run only when an anomaly fired since the previous run.
+- `ThrottledByLoadPolicy(max_run_risk=..., always_run_on_anomaly=...)` — skip when `CanalizationMetrics` reports load above the threshold; an anomaly during high load can still force a run.
+
+Hosts plug their own implementations through the protocol when finer-grained scheduling is needed.
+
+## Deliberation gate
+
+`DeliberationGate` is a pure threshold function that recommends `routine` vs `deliberative` reasoning given three small numbers: confidence, recent failure rate, remaining budget. Conservative default: stay routine unless confidence is below 0.6 *or* failure rate above 0.4 *and* budget remains above the floor. The gate is decision-only; it never executes either path.
+
+## Goal-assignment rebellion
+
+`RebelHook` is the pre-INTEND seam where the meta-layer evaluates an assigned goal against the agent's declared `CognitiveExpectation` set. The hook returns a typed `RebelDecision` with verdict `ACCEPT`, `REWRITE` (carrying a substitute goal), or `REJECT` (with a reason string). The default `AcceptingRebelHook` accepts every goal; production hosts inject a hook that consults their safety state.
+
+## Anticipatory risk
+
+`AnticipatoryRiskScorer` runs the three-step risk pipeline on a candidate plan:
+
+1. The host's `RiskModel` enumerates per-step `PlanRisk` records.
+2. `aggregate_risk_score` reduces them to a single scalar in `[0, 1]`, discounting by expected benefit.
+3. `classify_band` maps the scalar to a `RiskBand` (`LOW`, `MEDIUM`, `HIGH`).
+
+Returns a frozen `PlanRiskAssessment`. Slots into the EVAL phase before commit.
+
+## Intervention pattern taxonomy
+
+`InterventionType` labels what *pattern* of intervention is happening (`WIDEN_SEARCH`, `DROP_CONFIDENCE`, `FLUSH_MEMORY`, etc.) — orthogonal to `ControlActionType` which names the *mechanism* (`ADJUST_PRECISION`, `SWAP_MODULE`). One mechanism can serve many patterns; the pattern label keeps audit records intelligible. Pass `pattern=...` to `InterventionExecutor.validate`; the recorded `InterventionRecord` carries it through.
+
+## Failure-axis classification
+
+`classify_failure_mode` tags a `FailureMode` along the four-axis TRAP taxonomy (Transparency, Reasoning, Adaptation, Perception). Resolution order: explicit override argument, `trap:<axis>` marker in the description, deterministic keyword match against name + description. `TRAPRouter` then maps each axis to a recommended `ControlActionType` (Reasoning → `SWAP_MODULE`, Perception → `STRENGTHEN_MODULE`, Adaptation → `ADJUST_PRECISION`, Transparency → `SUPPRESS_MODULE`); host-supplied routing overrides defaults.
+
+## Competing-hypothesis distribution
+
+`AnomalyExplainer.explain_distribution(event, top_k=3)` returns up to ``top_k`` ranked `AnomalyExplanation` records instead of collapsing to a single best guess. Hosts read the distribution and decide whether the top-1 confidence exceeds the runner-up by enough margin to justify a high-impact intervention; otherwise they defer or gather more evidence.
+
 ## Failure Model
 
 Sakshi raises typed package exceptions from `sakshi.errors`.
