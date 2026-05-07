@@ -116,6 +116,6 @@ Expected benefits:
 
 Do not broaden Sakshi into social planning, swarm emergence, quantum cognition, cyber defense, command and control, training, or space operations.
 
-The best next implementation slice is **uncertainty boundary typing plus trust repair recommendations**. It is small, package-native, and directly strengthens existing `TrustReport`, `UncertaintyType`, `AnticipatoryRiskScorer`, and guard audit surfaces.
+The first follow-on implementation slice shipped after this audit adds **uncertainty boundary typing plus trust repair recommendations**. It is small, package-native, and directly strengthens existing `TrustReport`, `UncertaintyType`, `AnticipatoryRiskScorer`, and guard audit surfaces.
 
 Operator reliance telemetry is valuable, but it should wait until a host integration can provide real reliance events; otherwise it risks becoming a speculative metric.

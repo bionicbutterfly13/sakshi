@@ -7,6 +7,15 @@ releases may break public API in any minor version.
 
 ## [Unreleased]
 
+### Added
+- `models.UncertaintyBoundary` — typed boundary classifier that
+  distinguishes stochastic, ambiguous, ignorant, epistemic, and
+  ontological uncertainty so hosts can route "get more evidence" vs
+  "reframe the model" situations differently.
+- `models.TrustRepairAction` and `models.TrustRepairRecommendation` —
+  typed trust-repair recommendations that can be attached to
+  `TrustReport` without executing repair inside Sakshi.
+
 ## [0.9.0] - 2026-05-07
 
 ### Added

@@ -66,7 +66,10 @@ from sakshi.models.transparency import (
 )
 from sakshi.models.trust import (
     TrustBifurcation,
+    TrustRepairAction,
+    TrustRepairRecommendation,
     TrustReport,
+    UncertaintyBoundary,
     UncertaintyType,
 )
 from sakshi.models.world_state import WorldStateSnapshot
@@ -120,7 +123,10 @@ __all__ = [
     "StatusTransparency",
     "TransparencyLevel",
     "TrustBifurcation",
+    "TrustRepairAction",
+    "TrustRepairRecommendation",
     "TrustReport",
+    "UncertaintyBoundary",
     "UncertaintyType",
     "WorldStateSnapshot",
     "evaluate_envelope",

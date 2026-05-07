@@ -193,7 +193,11 @@ Returns a frozen `PlanRiskAssessment`. Slots into the EVAL phase before commit.
 
 `UncertaintyType` tags whether a confidence value reflects a `PROBABILITY` (single modeled hypothesis), `AMBIGUITY` (multiple equiprobable hypotheses), or `IGNORANCE` (no model). Hosts route differently in each case.
 
-`TrustReport` is the composite host-facing DTO that bundles a `TrustBifurcation`, an `UncertaintyType`, the labels of competing hypotheses (when applicable), a free-form calibration status, a coarse trajectory band, and a recommendation string. The surface humans see.
+`UncertaintyBoundary` adds the response-oriented classification: stochastic uncertainty, ambiguity across hypotheses, ignorance/no model, epistemic uncertainty where more evidence may help, or ontological/fundamental uncertainty where the model frame itself may be wrong.
+
+`TrustRepairRecommendation` records typed repair suggestions (`GATHER_EVIDENCE`, `WIDEN_HYPOTHESES`, `RECALIBRATE_MODULE`, `VERIFY_INTEGRITY`, `ESCALATE_TO_OPERATOR`, `REFRAME_MODEL`) with reason, target, severity, optional uncertainty boundary, and evidence keys. Sakshi records the suggestion; hosts decide whether and how to act.
+
+`TrustReport` is the composite host-facing DTO that bundles a `TrustBifurcation`, an `UncertaintyType`, an `UncertaintyBoundary`, the labels of competing hypotheses (when applicable), calibration status, trajectory band, free-form recommendation text, and typed repair recommendations. The surface humans see.
 
 ## Cost-matrix error shaping
 
@@ -241,4 +245,3 @@ Core modules use named Python loggers and high-signal structured message text. E
 ## Construction
 
 Sakshi package code does not ship singleton getters. Hosts construct runtime objects and pass configured protocol implementations. This keeps lifecycle, caching, and dependency ownership outside the library.
-
