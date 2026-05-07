@@ -27,6 +27,8 @@ from sakshi.interpret import (
     CalibrationTracker,
     CalibrationWarning,
     ConfidenceObservation,
+    ConfusionDecision,
+    ConfusionWeighter,
     GoalLineageAuditor,
     LineageReport,
     LineageVerdict,
@@ -68,6 +70,9 @@ from sakshi.models import (
     ResolutionLevel,
     StatusTransparency,
     TransparencyLevel,
+    TrustBifurcation,
+    TrustReport,
+    UncertaintyType,
 )
 from sakshi.plans import (
     Action,
@@ -91,7 +96,7 @@ from sakshi.protocols import (
 )
 from sakshi.registries import PhaseRegistry
 
-__version__ = "0.6.0a0"
+__version__ = "0.7.0a0"
 
 __all__ = [
     "AcceptingRebelHook",
@@ -109,6 +114,8 @@ __all__ = [
     "CanalizationRisk",
     "Clock",
     "ConfidenceObservation",
+    "ConfusionDecision",
+    "ConfusionWeighter",
     "DeliberationDecision",
     "DeliberationGate",
     "DeliberationPath",
@@ -162,6 +169,9 @@ __all__ = [
     "ThrottledByLoadPolicy",
     "TracePruner",
     "TransparencyLevel",
+    "TrustBifurcation",
+    "TrustReport",
+    "UncertaintyType",
     "WhereExpectationFiredPruner",
     "WorldStateUnavailableError",
     "WriteGuard",

@@ -7,6 +7,38 @@ releases may break public API in any minor version.
 
 ## [Unreleased]
 
+## [0.7.0a0] - 2026-05-07
+
+### Added
+- `models.TrustBifurcation` — two-axis self-trust DTO splitting
+  ``competence_confidence`` (capability reliability) from
+  ``integrity_confidence`` (signal pipeline trust). The
+  ``aggregate`` property combines them via geometric mean so a
+  weakness on either axis penalizes the score.
+- `models.UncertaintyType` enum — typed taxonomy distinguishing
+  ``PROBABILITY``, ``AMBIGUITY``, and ``IGNORANCE``. Lets a host ask
+  whether a confidence value reflects a modeled probability, a
+  competing-models hedge, or a no-model placeholder.
+- `models.TrustReport` — composite host-facing DTO bundling
+  ``TrustBifurcation``, ``UncertaintyType``, competing-hypothesis
+  labels, calibration status, trajectory band, and a free-form
+  recommendation string. The surface hosts surface to humans.
+- `interpret.ConfusionWeighter` (and helpers ``cost_weighted_argmin``,
+  ``expected_cost``) — typed cost-matrix error shaper that picks the
+  class minimizing expected cost given a host-supplied
+  ``{predicted: {true: cost}}`` matrix. Returns a
+  ``ConfusionDecision`` recording both the cost-weighted choice and
+  the naive arg-max baseline. ``ConfusionWeighter.from_uniform``
+  builds a starter matrix with asymmetric FP/FN costs.
+
+### Notes
+- ``MetaConfidence`` (Gaussian-over-confidence), ``TrustTrajectory``
+  (parametric trust-evolution curve), ``MiscalibrationPattern``
+  detector, and ``CoherenceWarning`` emergence-anomaly detector
+  (originally proposed) deferred. The CalibrationTracker shipped in
+  Phase B already produces per-decile warnings; multi-agent
+  coherence belongs in a host adapter.
+
 ## [0.6.0a0] - 2026-05-07
 
 ### Added

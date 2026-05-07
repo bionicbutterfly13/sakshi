@@ -19,6 +19,12 @@ from sakshi.interpret.calibration import (
     CalibrationWarning,
     ConfidenceObservation,
 )
+from sakshi.interpret.confusion import (
+    ConfusionDecision,
+    ConfusionWeighter,
+    cost_weighted_argmin,
+    expected_cost,
+)
 from sakshi.interpret.expectations import ExpectationEvaluator
 from sakshi.interpret.explanation import ExplanationEngine, ExplanationHypothesis
 from sakshi.interpret.lineage import (
@@ -39,6 +45,8 @@ __all__ = [
     "CalibrationTracker",
     "CalibrationWarning",
     "ConfidenceObservation",
+    "ConfusionDecision",
+    "ConfusionWeighter",
     "DEFAULT_DECILES",
     "DEFAULT_DEPTH_DRIFT_THRESHOLD",
     "DEFAULT_DEPTH_WARN_THRESHOLD",
@@ -56,4 +64,6 @@ __all__ = [
     "TRAPRouter",
     "classify_failure_mode",
     "compute_a_distance",
+    "cost_weighted_argmin",
+    "expected_cost",
 ]

@@ -187,6 +187,18 @@ Returns a frozen `PlanRiskAssessment`. Slots into the EVAL phase before commit.
 
 `AnomalyExplainer.explain_distribution(event, top_k=3)` returns up to ``top_k`` ranked `AnomalyExplanation` records instead of collapsing to a single best guess. Hosts read the distribution and decide whether the top-1 confidence exceeds the runner-up by enough margin to justify a high-impact intervention; otherwise they defer or gather more evidence.
 
+## Two-axis trust + uncertainty typing
+
+`TrustBifurcation` separates two questions a host operator usually conflates: how *competent* was the capability that produced this output (reliability under recent calibration) and how *intact* was the pipeline that delivered it (was the signal tampered with, censored, unverified). The two axes are reported independently; the `aggregate` property combines them via geometric mean so a weakness on either side penalizes the score.
+
+`UncertaintyType` tags whether a confidence value reflects a `PROBABILITY` (single modeled hypothesis), `AMBIGUITY` (multiple equiprobable hypotheses), or `IGNORANCE` (no model). Hosts route differently in each case.
+
+`TrustReport` is the composite host-facing DTO that bundles a `TrustBifurcation`, an `UncertaintyType`, the labels of competing hypotheses (when applicable), a free-form calibration status, a coarse trajectory band, and a recommendation string. The surface humans see.
+
+## Cost-matrix error shaping
+
+`ConfusionWeighter` is a typed cost-matrix decision helper. Given a probability vector and a `{predicted: {true: cost}}` matrix, it picks the class minimizing expected cost rather than the naive arg-max. Returns a `ConfusionDecision` recording both the chosen class and the naive baseline so audit trails show what the asymmetric cost structure actually changed. `ConfusionWeighter.from_uniform` builds a starter matrix from a class list plus FP/FN cost scalars.
+
 ## Failure Model
 
 Sakshi raises typed package exceptions from `sakshi.errors`.
