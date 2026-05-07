@@ -7,6 +7,40 @@ releases may break public API in any minor version.
 
 ## [Unreleased]
 
+## [0.9.0a0] - 2026-05-07
+
+### Added
+- `meta.RewardIntegrityGuard` protocol +
+  `EvidenceRequiringRewardIntegrityGuard` default — validates a
+  goal-achievement claim against a host-supplied set of exogenous
+  evidence keys. Refuses to record achievement when fewer than
+  ``min_evidence`` keys are present. Defends against the pattern
+  where an agent silently records "goal achieved" without the world
+  having moved.
+- `meta.ModificationIntegrityGuard` protocol +
+  `IntegrityCriticalModificationGuard` default — refuses to drop or
+  relax a `GoalConstraint` flagged ``integrity_critical=True``.
+  Specifically denies (a) demoting a critical constraint to
+  non-critical and (b) dropping any safety constraint from a
+  critical constraint's ``safety_constraints`` list. Closes the
+  Phase A → Phase F handshake on the ``integrity_critical`` flag.
+- `meta.GuardVerdict` and `meta.GuardDecision` — typed result shape
+  shared by both guards. ``GuardVerdict.permitted`` is the boolean
+  shortcut.
+- `meta.GuardAuditRecord` + `meta.make_audit_record` — frozen audit
+  record any guard verdict can be wrapped in for streaming through
+  a host event bus.
+- `meta.KnowledgeRewardBalance` enum (`KNOWLEDGE` / `REWARD` /
+  `HYBRID`) plus `biases_toward_exploration` and
+  `biases_against_exploration` predicates. Hosts use them when
+  deciding whether to suppress a curiosity-motivated goal because
+  the agent's budget is exhausted.
+
+### Notes
+- ``EpistemicState`` (multi-agent theory-of-mind seam, originally
+  proposed in Phase F) deferred. Sakshi is single-agent by
+  default; multi-agent belief tracking belongs in a host adapter.
+
 ## [0.8.0a0] - 2026-05-07
 
 ### Added

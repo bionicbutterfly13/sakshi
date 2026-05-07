@@ -210,6 +210,18 @@ Sakshi does not generate intrinsic motivations on its own — the host does. Wha
 
 The Witness stance: Sakshi observes the host's motivation record, validates against host-declared envelopes, and reports — never generates.
 
+## Defensive guards
+
+Two typed protocols guard against classic failure modes; both ship with sensible default implementations and accept host-supplied replacements when richer logic is needed.
+
+`RewardIntegrityGuard` validates a goal-achievement claim against a host-supplied set of exogenous evidence keys. The default `EvidenceRequiringRewardIntegrityGuard` requires at least ``min_evidence`` keys before permitting the claim. Defends against the pattern where an agent silently records "goal achieved" without the world having moved.
+
+`ModificationIntegrityGuard` validates a proposed `GoalConstraint` rewrite. The default `IntegrityCriticalModificationGuard` refuses to demote a constraint flagged ``integrity_critical=True`` to non-critical and refuses to drop any of its safety constraints. This closes the Phase A → Phase F handshake on the ``integrity_critical`` flag.
+
+Both guards return a typed `GuardVerdict`; `make_audit_record` wraps any verdict into a frozen `GuardAuditRecord` hosts stream through their event bus.
+
+`KnowledgeRewardBalance` is a host-declared preference enum (`KNOWLEDGE` / `REWARD` / `HYBRID`) with two predicate helpers (`biases_toward_exploration`, `biases_against_exploration`) hosts use when deciding whether to suppress a curiosity-motivated goal under budget pressure.
+
 ## Failure Model
 
 Sakshi raises typed package exceptions from `sakshi.errors`.
