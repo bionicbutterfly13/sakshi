@@ -16,9 +16,30 @@ from sakshi.errors import (
     SakshiError,
     WorldStateUnavailableError,
 )
+from sakshi.interpret import (
+    CalibrationReport,
+    CalibrationTracker,
+    CalibrationWarning,
+    ConfidenceObservation,
+    GoalLineageAuditor,
+    LineageReport,
+    LineageVerdict,
+)
+from sakshi.meta import (
+    AlwaysPermitPolicy,
+    CanalizationMetrics,
+    CanalizationRisk,
+    InterventionDecision,
+    InterventionExecutor,
+    InterventionOutcome,
+    InterventionPermissionPolicy,
+    InterventionRecord,
+)
 from sakshi.models import (
     AnomalySourceType,
     DiscrepancyResolution,
+    ExpectationProfile,
+    FailureMode,
     GoalEvent,
     GoalEventType,
     GoalMode,
@@ -43,26 +64,43 @@ from sakshi.protocols import (
 )
 from sakshi.registries import PhaseRegistry
 
-__version__ = "0.4.0a0"
+__version__ = "0.5.0a0"
 
 __all__ = [
     "Action",
+    "AlwaysPermitPolicy",
     "AlwaysPermitWriteGuard",
     "AnomalyEscalationError",
     "AnomalySourceType",
     "BasinHook",
+    "CalibrationReport",
+    "CalibrationTracker",
+    "CalibrationWarning",
+    "CanalizationMetrics",
+    "CanalizationRisk",
     "Clock",
+    "ConfidenceObservation",
     "DiscrepancyResolution",
     "EventBus",
+    "ExpectationProfile",
+    "FailureMode",
     "GoalConstraint",
     "GoalEvent",
     "GoalEventType",
+    "GoalLineageAuditor",
     "GoalMode",
     "GoalOperation",
     "GoalOperationEvent",
     "GoalStateStore",
     "GoalValidationError",
+    "InterventionDecision",
+    "InterventionExecutor",
+    "InterventionOutcome",
+    "InterventionPermissionPolicy",
+    "InterventionRecord",
     "LastNPruner",
+    "LineageReport",
+    "LineageVerdict",
     "NoOpBasinHook",
     "NoOpEventBus",
     "PhaseRegistry",

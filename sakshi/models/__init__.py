@@ -29,8 +29,10 @@ from sakshi.models.execution import (
 )
 from sakshi.models.expectation import (
     CognitiveExpectation,
+    ExpectationProfile,
     ExpectationSeverity,
     ExpectationViolation,
+    FailureMode,
 )
 from sakshi.models.goal import (
     Goal,
@@ -71,8 +73,10 @@ __all__ = [
     "CycleTrace",
     "DiscrepancyResolution",
     "EscalationLevel",
+    "ExpectationProfile",
     "ExpectationSeverity",
     "ExpectationViolation",
+    "FailureMode",
     "Goal",
     "GoalEvent",
     "GoalEventType",

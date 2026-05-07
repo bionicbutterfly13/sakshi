@@ -97,6 +97,56 @@ Hosts can write their own implementations against the protocol; the package neve
 
 Consumers usually want exactly one tier; the DTOs are not unioned.
 
+## Module contracts
+
+Every module that participates in a cycle can register an `ExpectationProfile` declaring five contract fields:
+
+- `runtime_bound_seconds` — latency SLA.
+- `output_schema` — JSON-schema-like dict, type name, or class path.
+- `confidence_range` — inclusive `[low, high]` bounds on self-reported confidence.
+- `side_effects_contract` — modules / blackboard keys / services this module is allowed to mutate.
+- `failure_modes` — admissible failure shapes (each with severity).
+
+This is the primary typed-monitoring surface. Sakshi watches the running module against its declaration; mismatches produce `ExpectationViolation` records routed through the standard event flow. Three convenience methods (`confidence_in_band`, `is_declared_failure`, `has_side_effect`) cover the most common checks.
+
+## Stuck-loop detection
+
+`CanalizationMetrics` is a frozen four-number struct that flags "agent stuck in a no-progress loop." The fields — `depth`, `dwell_time`, `perturbation_resistance`, `temperature_sensitivity` — combine into a coarse `CanalizationRisk` band (`HEALTHY` / `DEEPENING` / `PATHOLOGICAL`). The convenience factory `metrics_from_static_cycles()` derives the struct from the primitives existing detectors already emit. Hosts read the band to decide whether to widen search precision, swap a module, or escalate.
+
+## Intervention validation
+
+Every meta-cycle control action goes through an `InterventionExecutor` before it fires. The executor:
+
+1. Checks a per-`(action_type, target)` cooldown to prevent thrashing.
+2. Calls the host's `InterventionPermissionPolicy.is_permitted(action, history)`.
+3. Records every decision in a bounded `InterventionRecord` audit history.
+4. Accepts an `InterventionOutcome` callback so downstream effectiveness can be reported.
+
+The default `AlwaysPermitPolicy` is test-friendly; production hosts inject their own policy. The audit history is the seam human reviewers and post-hoc analysis tools read.
+
+## Confidence calibration
+
+`CalibrationTracker` is a sliding-window store for `(predicted_confidence, actually_correct)` pairs. One call to `report()` returns:
+
+- `self_trust_score` — single scalar in `[0.0, 1.0]` summarizing whether the agent's confidence claims line up with reality.
+- `calibration_warnings` — per-decile records identifying which confidence band is miscalibrated and by how much.
+
+A host that sees a warning at the 0.9 decile can widen the `confidence_range` on the offending module's `ExpectationProfile` rather than blanket-suppress.
+
+## Goal lineage
+
+`GoalLineageAuditor` walks the `metadata["source_goal_id"]` chain produced by `GoalTransformer` and reports a typed `LineageReport` with depth, widening-step count, transform chain, and a `LineageVerdict` (`ALIGNED` / `WARN` / `DRIFTED`). The auditor never intervenes; it returns a typed signal a host can route to a pre-INTEND gate, an operator dashboard, or both.
+
+## Outcome memory episode retrieval
+
+`GoalOutcomeMemory` is a typed log of past goal closures. Three accessors support post-mortem retrieval:
+
+- `recent(n)` — newest `n` records, newest first.
+- `find_similar(predicate_name=..., outcome_status=..., limit=...)` — recent records sharing a predicate name and (optionally) outcome.
+- `hit_rate(predicate_name=...)` — fraction of recorded records that achieved their goal.
+
+The store is a record log, not a learning system. Hosts that want strategy-level adaptation read these and decide.
+
 ## Failure Model
 
 Sakshi raises typed package exceptions from `sakshi.errors`.

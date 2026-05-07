@@ -7,6 +7,52 @@ releases may break public API in any minor version.
 
 ## [Unreleased]
 
+## [0.5.0a0] - 2026-05-07
+
+### Added
+- `meta.CanalizationMetrics` — frozen dataclass with four fields
+  (`depth`, `dwell_time`, `perturbation_resistance`,
+  `temperature_sensitivity`) plus a three-band `CanalizationRisk`
+  classifier (`HEALTHY` / `DEEPENING` / `PATHOLOGICAL`). Convenience
+  factory `metrics_from_static_cycles()` derives metrics from the
+  primitives existing detectors already emit.
+- `models.ExpectationProfile` — five-property contract every module
+  registers (`runtime_bound_seconds`, `output_schema`,
+  `confidence_range`, `side_effects_contract`, `failure_modes`). The
+  primary typed-monitoring surface: each module declares what it
+  should do; Sakshi watches and reports violations against the
+  declaration. `models.FailureMode` carries the per-mode severity.
+- `meta.InterventionExecutor` — validates every meta-cycle control
+  action (`SUPPRESS_MODULE`, `ADJUST_PRECISION`, `SWAP_MODULE`,
+  `STRENGTHEN_MODULE`, `REPLACE_MODULE`) against a typed
+  `InterventionPermissionPolicy` plus a configurable cooldown.
+  Records every decision in a bounded audit history and accepts an
+  `InterventionOutcome` callback so downstream effectiveness can be
+  recorded. Default `AlwaysPermitPolicy` is test-friendly; production
+  hosts plug their own policy.
+- `interpret.CalibrationTracker` — sliding-window tracker for
+  `(predicted_confidence, actually_correct)` pairs. Reports a
+  `self_trust_score` scalar and a list of `CalibrationWarning`
+  records identifying which confidence band is miscalibrated.
+  Consolidates what the original roadmap split across two phases
+  ("inverse trust" + "calibration auditor") into one tracker with
+  one DTO surface.
+- `interpret.GoalLineageAuditor` — walks the
+  `metadata["source_goal_id"]` chain produced by `GoalTransformer`
+  and reports a typed `LineageReport` with depth, widening-step
+  count, transform chain, and a `LineageVerdict`
+  (`ALIGNED` / `WARN` / `DRIFTED`). Pre-INTEND drift signal; never
+  intervenes on its own.
+- `goals.GoalOutcomeMemory.recent()`, `find_similar()`,
+  `hit_rate()`, and `__len__` — episode retrieval extensions on the
+  existing outcome store. No new module; the store remains a typed
+  log of past closures, not a learning system.
+
+### Changed
+- Rewrote `meta/canalization.py` docstrings in plain-user
+  vocabulary ("agent stuck in a no-progress loop") instead of
+  research-architecture jargon. The math is unchanged.
+
 ## [0.4.0a0] - 2026-05-07
 
 ### Added
