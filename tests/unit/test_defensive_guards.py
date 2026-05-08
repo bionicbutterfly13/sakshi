@@ -47,6 +47,24 @@ def test_reward_guard_higher_threshold() -> None:
     assert two.decision == GuardDecision.PERMIT
 
 
+def test_reward_guard_requires_named_evidence_keys() -> None:
+    guard = EvidenceRequiringRewardIntegrityGuard(
+        min_evidence=1,
+        required_evidence_keys=("tool:completed", "state:changed"),
+    )
+    missing = guard.validate_achievement(
+        goal_id="g-1",
+        evidence_keys=("tool:completed",),
+    )
+    present = guard.validate_achievement(
+        goal_id="g-1",
+        evidence_keys=("tool:completed", "state:changed"),
+    )
+    assert missing.decision == GuardDecision.DENY
+    assert "state:changed" in missing.reason
+    assert present.decision == GuardDecision.PERMIT
+
+
 def test_reward_guard_invalid_threshold() -> None:
     with pytest.raises(ValueError):
         EvidenceRequiringRewardIntegrityGuard(min_evidence=0)

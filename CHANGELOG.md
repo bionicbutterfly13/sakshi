@@ -7,6 +7,12 @@ releases may break public API in any minor version.
 
 ## [Unreleased]
 
+### Fixed
+- `meta.EvidenceRequiringRewardIntegrityGuard` constructor now accepts
+  `required_evidence_keys` correctly, restoring import/compile health and
+  letting hosts require named exogenous evidence keys before an achievement
+  claim is permitted.
+
 ## [0.10.0] - 2026-05-07
 
 ### Added

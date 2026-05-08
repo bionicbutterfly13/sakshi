@@ -75,10 +75,16 @@ class EvidenceRequiringRewardIntegrityGuard:
     of the protocol.
     """
 
-    def __init__(self, *, min_evidence: int = 1) -> None:
+    def __init__(
+        self,
+        *,
+        min_evidence: int = 1,
+        required_evidence_keys: Iterable[str] = (),
+    ) -> None:
         if min_evidence < 1:
             raise ValueError("min_evidence must be at least 1")
         self._min_evidence = min_evidence
+        self._required_evidence_keys = frozenset(required_evidence_keys)
 
     def validate_achievement(
         self,
@@ -86,12 +92,22 @@ class EvidenceRequiringRewardIntegrityGuard:
         goal_id: str,
         evidence_keys: Iterable[str],
     ) -> GuardVerdict:
-        keys = tuple(evidence_keys)
+        keys = frozenset(key for key in evidence_keys if key)
+        missing = self._required_evidence_keys - keys
+        if missing:
+            return GuardVerdict(
+                decision=GuardDecision.DENY,
+                reason=(
+                    f"goal {goal_id!r}: missing required exogenous evidence "
+                    f"key(s) {sorted(missing)}"
+                ),
+                evidence_count=len(keys),
+            )
         if len(keys) >= self._min_evidence:
             return GuardVerdict(
                 decision=GuardDecision.PERMIT,
                 reason=(
-                    f"goal {goal_id!r}: {len(keys)} exogenous evidence "
+                    f"goal {goal_id!r}: {len(keys)} distinct exogenous evidence "
                     f"key(s) >= required {self._min_evidence}"
                 ),
                 evidence_count=len(keys),
