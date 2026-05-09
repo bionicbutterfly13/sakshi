@@ -1,0 +1,65 @@
+site_name: Sakshi
+site_description: "A metacognitive runtime for Python agents: the Witness pattern."
+site_url: https://bionicbutterfly13.github.io/sakshi/
+repo_url: https://github.com/bionicbutterfly13/sakshi
+repo_name: bionicbutterfly13/sakshi
+
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - navigation.top
+    - search.suggest
+    - search.highlight
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths:
+            - .
+          options:
+            docstring_style: google
+            filters:
+              - "!^_"
+            heading_level: 2
+            members_order: source
+            show_bases: true
+            show_if_no_docstring: true
+            show_root_heading: true
+            show_signature_annotations: true
+            show_source: true
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - pymdownx.details
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - Architecture: architecture.md
+  - Principles: principles.md
+  - Quality: quality.md
+  - Trusted Autonomy Audit: trusted-autonomy-audit.md
+  - API Reference:
+      - Overview: api/index.md
+      - Public API: api/public.md
+      - Protocols: api/protocols.md
+      - Models: api/models.md
+      - Cycle: api/cycle.md
+      - Goals: api/goals.md
+      - Plans: api/plans.md
+      - Meta: api/meta.md
+      - Interpret: api/interpret.md
+      - Registries: api/registries.md
+      - Intake: api/intake.md
+      - World: api/world.md
+      - Errors: api/errors.md
+      - Config: api/config.md
+  - Release Checklist: release-checklist.md
+  - Implementation Journey: IMPLEMENTATION_JOURNEY.md

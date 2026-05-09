@@ -1,12 +1,18 @@
-.PHONY: help all setup fmt fmt-check lint test compile hygiene ci
+.PHONY: help all setup docs-serve docs-build fmt fmt-check lint test compile hygiene ci
 
 PYTHON ?= python
 
 help:
-	@echo "Targets: setup, fmt, fmt-check, lint, test, compile, hygiene, ci, all"
+	@echo "Targets: setup, docs-serve, docs-build, fmt, fmt-check, lint, test, compile, hygiene, ci, all"
 
 setup:
 	$(PYTHON) -m pip install -e .[dev]
+
+docs-serve:
+	$(PYTHON) -m mkdocs serve
+
+docs-build:
+	$(PYTHON) -m mkdocs build --strict
 
 fmt:
 	$(PYTHON) -m ruff format sakshi tests
