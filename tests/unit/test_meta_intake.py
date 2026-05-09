@@ -6,7 +6,13 @@ import pytest
 
 from sakshi.goals import DomainRegistry, GoalGenerator, GoalGraph, GoalValidator
 from sakshi.intake import InstructionIngestRequest, InstructionIngestService
-from sakshi.meta import MetaController, build_world_state_from_trace
+from sakshi.meta import (
+    DenyByDefaultPolicy,
+    InterventionDecision,
+    InterventionExecutor,
+    MetaController,
+    build_world_state_from_trace,
+)
 from sakshi.models import ControlActionType, CycleTrace, OODAPhase, PhaseResult
 
 
@@ -82,7 +88,45 @@ async def test_meta_controller_monitors_assesses_controls_and_emits() -> None:
         action.action_type == ControlActionType.STRENGTHEN_MODULE
         for action in result.actions
     )
+    assert result.intervention_records
+    assert all(
+        record.decision == InterventionDecision.PERMIT
+        for record in result.intervention_records
+    )
     assert bus.events[0][0] == "sakshi.meta.control"
+    assert len(bus.events[0][1]["actions"]) == len(result.actions)
+
+
+@pytest.mark.asyncio
+async def test_meta_controller_denied_intervention_blocks_publication() -> None:
+    bus = FakeEventBus()
+    controller = MetaController(
+        event_bus=bus,
+        intervention_executor=InterventionExecutor(
+            policy=DenyByDefaultPolicy(),
+            cooldown_seconds=0.0,
+        ),
+    )
+    trace = CycleTrace(
+        cycle_id="cycle-1",
+        phase_results=[
+            PhaseResult(
+                phase_name="PERCEIVE",
+                ooda_phase=OODAPhase.OBSERVE,
+                output={"confidence": 0.2},
+            )
+        ],
+    )
+
+    result = await controller.run_meta_cycle(trace, opacity_level=0.5)
+
+    assert result.actions == []
+    assert result.intervention_records
+    assert all(
+        record.decision == InterventionDecision.DENY_POLICY
+        for record in result.intervention_records
+    )
+    assert bus.events == []
 
 
 @pytest.mark.asyncio

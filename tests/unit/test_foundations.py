@@ -3,6 +3,7 @@ from __future__ import annotations
 import pytest
 
 from sakshi.cycle import CognitiveBlackboard, CycleHistory
+from sakshi.errors import PhaseTransitionError
 from sakshi.models import (
     BlackboardKey,
     CycleTrace,
@@ -10,6 +11,7 @@ from sakshi.models import (
     GoalPredicate,
     WorldStateSnapshot,
 )
+from sakshi.protocols import DenyByDefaultWriteGuard
 from sakshi.registries import ModuleRegistry, PhaseRegistry
 
 
@@ -76,6 +78,36 @@ async def test_phase_registry_records_and_emits_cycle_complete() -> None:
             },
         )
     ]
+
+
+@pytest.mark.asyncio
+async def test_phase_registry_fail_fast_callbacks_surfaces_callback_failure() -> None:
+    bus = FakeEventBus()
+    registry = PhaseRegistry(event_bus=bus, fail_fast_callbacks=True)
+
+    async def failing_callback(trace: CycleTrace) -> None:
+        del trace
+        raise RuntimeError("callback storage failed")
+
+    registry.on_cycle_complete(failing_callback)
+    await registry.start_cycle("cycle-1")
+
+    with pytest.raises(PhaseTransitionError, match="callback failed"):
+        await registry.finalize_cycle()
+
+    assert bus.events == []
+
+
+@pytest.mark.asyncio
+async def test_deny_by_default_write_guard_denies_without_host_guard() -> None:
+    guard = DenyByDefaultWriteGuard()
+
+    allowed = await guard.check(
+        "sakshi.goal_outcome",
+        {"goal_id": "g", "status": "achieved"},
+    )
+
+    assert allowed is False
 
 
 def test_core_dtos_instantiate() -> None:

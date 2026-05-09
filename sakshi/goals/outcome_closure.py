@@ -91,18 +91,16 @@ class GoalOutcomeClosureService:
         summary: GoalExecutionSummary,
     ) -> GoalStatus | None:
         statuses = [result.status for result in summary.action_results]
-        if any(status == ActionExecutionStatus.DEFERRED for status in statuses):
+        if statuses and all(
+            status == ActionExecutionStatus.DEFERRED for status in statuses
+        ):
             return GoalStatus.DELEGATED
         if statuses and all(
             status == ActionExecutionStatus.COMPLETED for status in statuses
         ):
             return GoalStatus.ACHIEVED
-        if (
-            statuses
-            and any(status == ActionExecutionStatus.FAILED for status in statuses)
-            and not any(
-                status == ActionExecutionStatus.COMPLETED for status in statuses
-            )
+        if statuses and all(
+            status == ActionExecutionStatus.FAILED for status in statuses
         ):
             return GoalStatus.ABANDONED
         return None

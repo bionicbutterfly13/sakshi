@@ -8,6 +8,7 @@ import pytest
 
 from sakshi.meta import (
     AlwaysPermitPolicy,
+    DenyByDefaultPolicy,
     InterventionDecision,
     InterventionExecutor,
     InterventionOutcome,
@@ -98,3 +99,12 @@ def test_always_permit_policy_signature() -> None:
     permitted, reason = policy.is_permitted(_action(), [])
     assert permitted is True
     assert "default policy" in reason
+
+
+def test_deny_by_default_policy_denies_until_host_policy_is_supplied() -> None:
+    executor = InterventionExecutor(policy=DenyByDefaultPolicy())
+
+    record = executor.validate(_action())
+
+    assert record.decision == InterventionDecision.DENY_POLICY
+    assert "deny until host permission policy is supplied" in record.reason

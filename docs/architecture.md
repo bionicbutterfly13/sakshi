@@ -132,17 +132,20 @@ This is the primary typed-monitoring surface. Sakshi watches the running module 
 ## Intervention validation
 
 `InterventionExecutor` is the package's validation primitive for meta-cycle
-control actions, but `MetaController` currently publishes generated
-`ControlAction` intent to the host event bus directly. Hosts that execute those
-actions should route them through an `InterventionExecutor` before applying
-side effects. The executor:
+control actions. `MetaController` routes generated `ControlAction` intent
+through an executor before publishing to the host event bus. The host still owns
+runtime side effects; Sakshi publishes only permitted control intent plus an
+audit record of every permit or deny decision. The executor:
 
 1. Checks a per-`(action_type, target)` cooldown to prevent thrashing.
 2. Calls the host's `InterventionPermissionPolicy.is_permitted(action, history)`.
 3. Records every decision in a bounded `InterventionRecord` audit history.
 4. Accepts an `InterventionOutcome` callback so downstream effectiveness can be reported.
 
-The default `AlwaysPermitPolicy` is test-friendly; production hosts inject their own policy. The audit history is the seam human reviewers and post-hoc analysis tools read. Wiring this executor directly into `MetaController` remains the planned package-level enforcement boundary.
+The default `AlwaysPermitPolicy` is test-friendly; production hosts inject their
+own policy. `MetaCycleResult.actions` contains only permitted/published actions,
+while `MetaCycleResult.intervention_records` exposes the full decision trail.
+The audit history is the seam human reviewers and post-hoc analysis tools read.
 
 ## Confidence calibration
 

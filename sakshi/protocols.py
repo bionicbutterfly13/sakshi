@@ -111,10 +111,24 @@ class AlwaysPermitWriteGuard:
         return True
 
 
+class DenyByDefaultWriteGuard:
+    """Safe `WriteGuard` that denies every write until a host policy replaces it.
+
+    This is the right placeholder for production scaffolds: it preserves the
+    protocol shape while failing closed instead of silently permitting writes.
+    Tests and quickstarts can continue using `AlwaysPermitWriteGuard` when they
+    deliberately do not exercise host write policy.
+    """
+
+    async def check(self, source_origin: str, payload: Mapping[str, Any]) -> bool:
+        return False
+
+
 __all__ = [
     "AlwaysPermitWriteGuard",
     "BasinHook",
     "Clock",
+    "DenyByDefaultWriteGuard",
     "EventBus",
     "GoalStateStore",
     "NoOpBasinHook",

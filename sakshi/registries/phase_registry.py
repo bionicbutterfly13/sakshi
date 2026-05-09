@@ -106,12 +106,14 @@ class PhaseRegistry:
         event_bus: EventBus,
         phase_config: dict[str, PhaseSlot] | None = None,
         cycle_complete_event_type: str = "sakshi.cycle.complete",
+        fail_fast_callbacks: bool = False,
     ) -> None:
         self._event_bus = event_bus
         self._phases: dict[str, PhaseSlot] = (
             phase_config if phase_config is not None else dict(DEFAULT_PHASE_REGISTRY)
         )
         self._cycle_complete_event_type = cycle_complete_event_type
+        self._fail_fast_callbacks = fail_fast_callbacks
         self._current_trace: CycleTrace | None = None
         self._last_completed_trace: CycleTrace | None = None
         self._callbacks: list[CycleCompleteCallback] = []
@@ -232,6 +234,10 @@ class PhaseRegistry:
                     exc,
                     exc_info=True,
                 )
+                if self._fail_fast_callbacks:
+                    raise PhaseTransitionError(
+                        "cycle completion callback failed"
+                    ) from exc
 
         await self._publish_cycle_complete(trace)
 

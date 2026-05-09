@@ -20,6 +20,7 @@ class GoalMonitorResult:
     goal_id: str
     is_valid: bool
     reason: str
+    store_error: str | None = None
 
 
 class GoalMonitor:
@@ -31,10 +32,12 @@ class GoalMonitor:
         futile_abandonment_threshold: float = 0.6,
         minimum_history_records: int = 3,
         efe_completion_threshold: float = 0.1,
+        fail_closed_on_store_error: bool = False,
     ) -> None:
         self._futile_abandonment_threshold = futile_abandonment_threshold
         self._minimum_history_records = minimum_history_records
         self._efe_completion_threshold = efe_completion_threshold
+        self._fail_closed_on_store_error = fail_closed_on_store_error
 
     def check_validity(
         self,
@@ -118,8 +121,21 @@ class GoalMonitor:
                 }
             )
         except Exception as exc:
-            logger.warning("GoalMonitor: state-store check failed: %s", exc)
-            return base_result
+            error = str(exc)
+            logger.warning("GoalMonitor: state-store check failed: %s", error)
+            if self._fail_closed_on_store_error:
+                return GoalMonitorResult(
+                    goal_id=goal.id,
+                    is_valid=False,
+                    reason="state_store_unavailable",
+                    store_error=error,
+                )
+            return GoalMonitorResult(
+                goal_id=base_result.goal_id,
+                is_valid=base_result.is_valid,
+                reason=base_result.reason,
+                store_error=error,
+            )
 
         if not stored_state.contains(goal.predicate.name):
             return GoalMonitorResult(

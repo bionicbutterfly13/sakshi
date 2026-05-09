@@ -42,6 +42,15 @@ def _goal(
     )
 
 
+class FailingGoalStateStore:
+    async def fetch_world_state(self, query: dict) -> WorldStateSnapshot:
+        del query
+        raise RuntimeError("state store offline")
+
+    async def record_goal_outcome(self, record: GoalOutcomeRecord) -> None:
+        del record
+
+
 @pytest.mark.asyncio
 async def test_goal_generator_validates_and_optionally_inserts_into_graph() -> None:
     domain = DomainRegistry()
@@ -149,6 +158,23 @@ def test_goal_monitor_validity_and_structured_history() -> None:
 
 
 @pytest.mark.asyncio
+async def test_goal_monitor_fail_closed_store_error_marks_goal_invalid() -> None:
+    monitor = GoalMonitor(fail_closed_on_store_error=True)
+    goal = _goal("g", "CLEAR")
+
+    result = await monitor.check_validity_with_store(
+        goal,
+        WorldStateSnapshot(facts={}),
+        FailingGoalStateStore(),
+    )
+
+    assert result.goal_id == "g"
+    assert result.is_valid is False
+    assert result.reason == "state_store_unavailable"
+    assert result.store_error == "state store offline"
+
+
+@pytest.mark.asyncio
 async def test_goal_outcome_closure_mutates_graph_and_records_outcome() -> None:
     graph = GoalGraph()
     memory = GoalOutcomeMemory()
@@ -180,3 +206,67 @@ async def test_goal_outcome_closure_mutates_graph_and_records_outcome() -> None:
     assert graph.get_node("g").goal.status == GoalStatus.ACHIEVED
     assert memory.list_records(goal_id="g") == records
     assert graph.get_node("g").goal.metadata["last_outcome"]["cycle_id"] == "cycle-1"
+
+
+@pytest.mark.asyncio
+async def test_goal_outcome_closure_ignores_mixed_completed_failed_actions() -> None:
+    graph = GoalGraph()
+    memory = GoalOutcomeMemory()
+    graph.add_goal(_goal("g", "CLEAR"))
+    closure = GoalOutcomeClosureService(graph=graph, outcome_memory=memory)
+
+    records = await closure.close_from_summary(
+        GoalExecutionSummary(
+            focus_goal_id="g",
+            cycle_id="cycle-1",
+            plan_steps=["do_work", "verify_work"],
+            action_results=[
+                ActionExecutionResult(
+                    status=ActionExecutionStatus.COMPLETED,
+                    action_type="do_work",
+                ),
+                ActionExecutionResult(
+                    status=ActionExecutionStatus.FAILED,
+                    action_type="verify_work",
+                    error="verification failed",
+                ),
+            ],
+        )
+    )
+
+    assert records == []
+    assert graph.get_node("g").goal.status == GoalStatus.ACTIVE
+    assert memory.list_records(goal_id="g") == []
+    assert "last_outcome" not in graph.get_node("g").goal.metadata
+
+
+@pytest.mark.asyncio
+async def test_goal_outcome_closure_ignores_mixed_deferred_completed_actions() -> None:
+    graph = GoalGraph()
+    memory = GoalOutcomeMemory()
+    graph.add_goal(_goal("g", "CLEAR"))
+    closure = GoalOutcomeClosureService(graph=graph, outcome_memory=memory)
+
+    records = await closure.close_from_summary(
+        GoalExecutionSummary(
+            focus_goal_id="g",
+            cycle_id="cycle-1",
+            plan_steps=["do_work", "hand_off"],
+            action_results=[
+                ActionExecutionResult(
+                    status=ActionExecutionStatus.COMPLETED,
+                    action_type="do_work",
+                ),
+                ActionExecutionResult(
+                    status=ActionExecutionStatus.DEFERRED,
+                    action_type="hand_off",
+                    data={"delegate_to": "operator"},
+                ),
+            ],
+        )
+    )
+
+    assert records == []
+    assert graph.get_node("g").goal.status == GoalStatus.ACTIVE
+    assert memory.list_records(goal_id="g") == []
+    assert "last_outcome" not in graph.get_node("g").goal.metadata

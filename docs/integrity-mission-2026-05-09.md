@@ -27,4 +27,5 @@ Bring Sakshi closer to integrity by fixing false-green safety/control surfaces.
 ## Progress Log
 
 - 2026-05-09: Mission started. Existing unstaged safety-surface edits detected and preserved.
+- 2026-05-09: `MetaController` now validates generated control actions through `InterventionExecutor` before publishing permitted host control intent.
 - 2026-05-09: Docs-only worker verified `MetaController` still publishes control intent directly; updated architecture wording to describe `InterventionExecutor` as the current host-facing validation primitive and planned package-level enforcement boundary.

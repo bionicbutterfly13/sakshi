@@ -14,6 +14,11 @@ from typing import Any
 
 from sakshi.goals import GoalGenerator, GoalGraph, GoalMonitor, GoalTransformer
 from sakshi.interpret import AnomalyPersistenceTracker
+from sakshi.meta.intervention_executor import (
+    InterventionDecision,
+    InterventionExecutor,
+    InterventionRecord,
+)
 from sakshi.models import (
     ControlAction,
     ControlActionType,
@@ -45,6 +50,7 @@ class MetaCycleResult:
     actions: list[ControlAction] = field(default_factory=list)
     assessment: dict[str, Any] = field(default_factory=dict)
     monitoring_data: dict[str, Any] = field(default_factory=dict)
+    intervention_records: list[InterventionRecord] = field(default_factory=list)
 
 
 class CognitiveAssessor:
@@ -112,6 +118,7 @@ class MetaController:
         anomaly_tracker: AnomalyPersistenceTracker | None = None,
         event_bus: EventBus | None = None,
         write_guard: WriteGuard | None = None,
+        intervention_executor: InterventionExecutor | None = None,
         anomaly_frequency_provider: AnomalyFrequencyProvider | None = None,
         meta_control_event_type: str = "sakshi.meta.control",
     ) -> None:
@@ -123,6 +130,9 @@ class MetaController:
         self._anomaly_tracker = anomaly_tracker or AnomalyPersistenceTracker()
         self._event_bus = event_bus
         self._write_guard = write_guard
+        self._intervention_executor = intervention_executor or InterventionExecutor(
+            cooldown_seconds=0.0
+        )
         self._anomaly_frequency_provider = anomaly_frequency_provider
         self._meta_control_event_type = meta_control_event_type
         self._plan_failure_counts: dict[str, int] = {}
@@ -152,12 +162,16 @@ class MetaController:
         actions = self._plan(assessment)
 
         # 6. CONTROL: Execute the control actions
-        await self._control(cycle_trace.cycle_id, actions)
+        permitted_actions, intervention_records = await self._control(
+            cycle_trace.cycle_id,
+            actions,
+        )
 
         return MetaCycleResult(
-            actions=actions,
+            actions=permitted_actions,
             assessment=assessment,
             monitoring_data=monitoring_data,
+            intervention_records=intervention_records,
         )
 
     async def _interpret(
@@ -180,9 +194,23 @@ class MetaController:
         """PLAN phase: Generate actions to correct cognitive issues."""
         return self._generate_control_actions(assessment)
 
-    async def _control(self, cycle_id: str, actions: list[ControlAction]) -> None:
-        """CONTROL phase: Execute the control actions."""
-        await self._publish_meta_control(cycle_id, actions)
+    async def _control(
+        self,
+        cycle_id: str,
+        actions: list[ControlAction],
+    ) -> tuple[list[ControlAction], list[InterventionRecord]]:
+        """CONTROL phase: validate and publish permitted host control intent."""
+        permitted_actions: list[ControlAction] = []
+        intervention_records: list[InterventionRecord] = []
+        for action in actions:
+            record = self._intervention_executor.validate(action)
+            intervention_records.append(record)
+            if record.decision == InterventionDecision.PERMIT:
+                permitted_actions.append(action)
+
+        if permitted_actions:
+            await self._publish_meta_control(cycle_id, permitted_actions)
+        return permitted_actions, intervention_records
 
     async def _monitor(
         self,

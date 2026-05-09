@@ -122,6 +122,18 @@ class AlwaysPermitPolicy:
         return True, "default policy: permit"
 
 
+class DenyByDefaultPolicy:
+    """Safe policy that denies every intervention until a host policy replaces it."""
+
+    def is_permitted(
+        self,
+        action: ControlAction,
+        history: Iterable[InterventionRecord],
+    ) -> tuple[bool, str]:
+        del action, history
+        return False, "default policy: deny until host permission policy is supplied"
+
+
 class InterventionExecutor:
     """Gate every meta-cycle intervention through typed validation.
 
@@ -279,6 +291,7 @@ __all__ = [
     "DEFAULT_COOLDOWN_SECONDS",
     "DEFAULT_HISTORY_SIZE",
     "AlwaysPermitPolicy",
+    "DenyByDefaultPolicy",
     "InterventionDecision",
     "InterventionExecutor",
     "InterventionOutcome",
