@@ -99,31 +99,29 @@ class GoalGraph:
         if goal.id in self._nodes:
             raise ValueError(f"Goal {goal.id!r} already exists in the graph.")
 
-        parent_node: GoalNode | None = None
-        if parent_id is not None:
-            parent_node = self.get_node(parent_id)
+        if parent_id is None:
+            node = GoalNode(goal=goal, parent=None)
+            self._nodes[goal.id] = node
+            logger.debug("GoalGraph: added root goal %s", goal.id)
+            return node
 
+        parent_node = self.get_node(parent_id)
         node = GoalNode(goal=goal, parent=parent_node)
         self._nodes[goal.id] = node
-
-        if parent_node is not None:
-            parent_node.children.append(node)
-            self._edges.append(
-                GoalEdge(
-                    parent_id=parent_id,
-                    child_id=goal.id,
-                    coupling_strength=coupling_strength,
-                )
+        parent_node.children.append(node)
+        self._edges.append(
+            GoalEdge(
+                parent_id=parent_id,
+                child_id=goal.id,
+                coupling_strength=coupling_strength,
             )
-            logger.debug(
-                "GoalGraph: added child %s -> parent %s (coupling=%.2f)",
-                goal.id,
-                parent_id,
-                coupling_strength,
-            )
-        else:
-            logger.debug("GoalGraph: added root goal %s", goal.id)
-
+        )
+        logger.debug(
+            "GoalGraph: added child %s -> parent %s (coupling=%.2f)",
+            goal.id,
+            parent_id,
+            coupling_strength,
+        )
         return node
 
     def get_node(self, goal_id: str) -> GoalNode:

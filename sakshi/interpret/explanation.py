@@ -12,6 +12,7 @@ from datetime import UTC, datetime
 from typing import Any
 
 from sakshi.models import AnomalyType, Goal
+from sakshi.models.goal import GoalPredicate
 
 logger = logging.getLogger(__name__)
 
@@ -77,12 +78,11 @@ class ExplanationEngine:
         if not hypothesis.suggested_goal_predicate:
             return None
 
-        # Create a new goal targeting the root cause
         return Goal(
             id=f"gda-{hypothesis.suggested_goal_predicate}-{int(datetime.now(UTC).timestamp())}",
-            predicate={"name": hypothesis.suggested_goal_predicate, "args": {}},
+            predicate=GoalPredicate(name=hypothesis.suggested_goal_predicate),
             basin_name="metacognitive_repair",
-            priority=0.8,  # High priority for GDA goals
+            priority=3,
         )
 
 
