@@ -45,3 +45,10 @@ graphify-out/
 
 # Conductor local control-plane artifacts
 conductor/
+
+# Serena MCP cache (IDE-only, regenerable)
+.serena/
+
+# Local scratch notes (out-of-tree research material)
+scratch_*.txt
+scratch_*.md
