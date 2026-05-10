@@ -7,11 +7,32 @@ releases may break public API in any minor version.
 
 ## [Unreleased]
 
+### Removed
+- `interpret.ExplanationEngine` and `interpret.ExplanationHypothesis`.
+  These were a 0.4-era scaffold for an XPLAIN-style anomaly→goal pathway
+  that was superseded by `goals.GoalGenerator` (paired with
+  `interpret.AnomalyExplanation`) and never wired into the cycle. They
+  carried mypy errors against the current `Goal` contract and were
+  exported but uncalled. Hosts that need the same flow should use
+  `GoalGenerator.generate_from_canalization_event` and the live
+  anomaly-explanation pipeline.
+
 ### Fixed
 - `meta.EvidenceRequiringRewardIntegrityGuard` constructor now accepts
   `required_evidence_keys` correctly, restoring import/compile health and
   letting hosts require named exogenous evidence keys before an achievement
   claim is permitted.
+- `cycle.CognitiveBlackboard.clear()` is now atomic against concurrent
+  writers. Previously it acquired and immediately released each per-key
+  lock before clearing, leaving a window where a queued `set()` could
+  interleave with the dict reset; it now holds every per-key lock for
+  the duration of the clear.
+- Type drift in `goals.GoalGraph.add_goal` (parent_id narrowing) and the
+  removed `interpret.ExplanationEngine` (Goal predicate / priority
+  contract) — `mypy sakshi/` is clean again.
+
+### Changed
+- `make ci` now runs `mypy sakshi` so type drift fails the gate.
 
 ## [0.10.0] - 2026-05-07
 

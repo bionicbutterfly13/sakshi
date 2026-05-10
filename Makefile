@@ -1,9 +1,9 @@
-.PHONY: help all setup docs-serve docs-build fmt fmt-check lint test compile hygiene ci
+.PHONY: help all setup docs-serve docs-build fmt fmt-check lint typecheck test compile hygiene ci
 
 PYTHON ?= python
 
 help:
-	@echo "Targets: setup, docs-serve, docs-build, fmt, fmt-check, lint, test, compile, hygiene, ci, all"
+	@echo "Targets: setup, docs-serve, docs-build, fmt, fmt-check, lint, typecheck, test, compile, hygiene, ci, all"
 
 setup:
 	$(PYTHON) -m pip install -e .[dev]
@@ -23,6 +23,9 @@ fmt-check:
 lint:
 	$(PYTHON) -m ruff check sakshi tests
 
+typecheck:
+	$(PYTHON) -m mypy sakshi
+
 test:
 	$(PYTHON) -m pytest tests
 
@@ -36,6 +39,7 @@ ci:
 	$(MAKE) compile
 	$(MAKE) fmt-check
 	$(MAKE) lint
+	$(MAKE) typecheck
 	$(MAKE) hygiene
 	$(MAKE) test
 

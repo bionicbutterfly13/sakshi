@@ -26,7 +26,6 @@ from sakshi.interpret.confusion import (
     expected_cost,
 )
 from sakshi.interpret.expectations import ExpectationEvaluator
-from sakshi.interpret.explanation import ExplanationEngine, ExplanationHypothesis
 from sakshi.interpret.lineage import (
     DEFAULT_DEPTH_DRIFT_THRESHOLD,
     DEFAULT_DEPTH_WARN_THRESHOLD,
@@ -54,8 +53,6 @@ __all__ = [
     "DEFAULT_WINDOW_SIZE",
     "DRFreeAmbiguityDetector",
     "ExpectationEvaluator",
-    "ExplanationEngine",
-    "ExplanationHypothesis",
     "GoalLineageAuditor",
     "LineageReport",
     "LineageVerdict",
