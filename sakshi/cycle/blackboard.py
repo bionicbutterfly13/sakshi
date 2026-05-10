@@ -14,6 +14,7 @@ from __future__ import annotations
 import asyncio
 import copy
 import logging
+from contextlib import AsyncExitStack
 from typing import Any
 
 from sakshi.models.blackboard import BlackboardKey, BlackboardSnapshot
@@ -66,14 +67,22 @@ class CognitiveBlackboard:
     async def clear(self) -> None:
         """Clear all data from the blackboard.
 
-        Acquires every per-key lock in turn to ensure no concurrent
-        operation is in flight before clearing.
+        Holds every per-key lock simultaneously while clearing so a
+        concurrent ``set()`` cannot interleave a write between the
+        last lock release and ``self._data.clear()``. Locks are taken
+        in a deterministic key-value order; no other method on this
+        class acquires more than one lock at a time, so the
+        multi-lock acquisition cannot deadlock against single-lock
+        callers.
         """
-        for key in list(self._data.keys()):
-            lock = self._get_lock(key)
-            async with lock:
-                pass
-        self._data.clear()
+        ordered_locks = [
+            self._locks[key]
+            for key in sorted(self._locks.keys(), key=lambda k: k.value)
+        ]
+        async with AsyncExitStack() as stack:
+            for lock in ordered_locks:
+                await stack.enter_async_context(lock)
+            self._data.clear()
 
     async def keys(self) -> list[BlackboardKey]:
         """Return a list of currently set keys."""

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import asyncio
+
 import pytest
 
 from sakshi.cycle import CognitiveBlackboard, CycleHistory
@@ -34,6 +36,33 @@ async def test_blackboard_snapshots_are_decoupled_from_live_state() -> None:
 
     assert snapshot.cycle_id == "cycle-1"
     assert snapshot.data["states"]["position"] == 1
+
+
+@pytest.mark.asyncio
+async def test_blackboard_clear_is_atomic_against_concurrent_writers() -> None:
+    """clear() must hold every per-key lock so concurrent sets cannot leave
+    a partially-cleared dict — i.e. no key written *before* clear() may
+    survive into the post-clear state.
+    """
+    blackboard = CognitiveBlackboard()
+
+    pre_clear_keys = [BlackboardKey.STATES, BlackboardKey.GOALS]
+    for key in pre_clear_keys:
+        await blackboard.set(key, {"phase": "pre-clear"})
+
+    async def late_writer(key: BlackboardKey) -> None:
+        await blackboard.set(key, {"phase": "post-clear"})
+
+    writer_task = asyncio.create_task(late_writer(BlackboardKey.STATES))
+    await blackboard.clear()
+    await writer_task
+
+    keys_after = await blackboard.keys()
+    for key in keys_after:
+        value = await blackboard.get(key)
+        assert value == {"phase": "post-clear"}, (
+            f"key {key!r} carries pre-clear residue: {value!r}"
+        )
 
 
 def test_cycle_history_tracks_latest_trace() -> None:
