@@ -1,8 +1,8 @@
 cff-version: 1.2.0
 message: "If you use Sakshi, please cite this package and the related work listed in INSPIRATION.md."
 title: "Sakshi"
-version: "0.10.0"
-date-released: 2026-05-07
+version: "0.11.0"
+date-released: 2026-05-10
 repository-code: "https://github.com/bionicbutterfly13/sakshi"
 url: "https://github.com/bionicbutterfly13/sakshi"
 license: "Apache-2.0"

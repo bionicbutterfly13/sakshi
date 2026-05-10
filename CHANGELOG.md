@@ -7,6 +7,8 @@ releases may break public API in any minor version.
 
 ## [Unreleased]
 
+## [0.11.0] - 2026-05-10
+
 ### Removed
 - `interpret.ExplanationEngine` and `interpret.ExplanationHypothesis`.
   These were a 0.4-era scaffold for an XPLAIN-style anomaly→goal pathway
