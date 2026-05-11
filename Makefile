@@ -1,9 +1,10 @@
-.PHONY: help all setup docs-serve docs-build fmt fmt-check lint typecheck test compile hygiene ci
+.PHONY: help all setup docs-serve docs-build fmt fmt-check lint typecheck test coverage compile hygiene ci
 
 PYTHON ?= python
+COVERAGE_MIN ?= 88
 
 help:
-	@echo "Targets: setup, docs-serve, docs-build, fmt, fmt-check, lint, typecheck, test, compile, hygiene, ci, all"
+	@echo "Targets: setup, docs-serve, docs-build, fmt, fmt-check, lint, typecheck, test, coverage, compile, hygiene, ci, all"
 
 setup:
 	$(PYTHON) -m pip install -e .[dev]
@@ -29,6 +30,9 @@ typecheck:
 test:
 	$(PYTHON) -m pytest tests
 
+coverage:
+	$(PYTHON) -m pytest tests --cov=sakshi --cov-report=term-missing --cov-fail-under=$(COVERAGE_MIN)
+
 compile:
 	$(PYTHON) -m compileall -q sakshi
 
@@ -41,6 +45,6 @@ ci:
 	$(MAKE) lint
 	$(MAKE) typecheck
 	$(MAKE) hygiene
-	$(MAKE) test
+	$(MAKE) coverage
 
 all: ci

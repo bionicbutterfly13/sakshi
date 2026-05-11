@@ -18,6 +18,19 @@ ruff check sakshi tests
 ruff format --check sakshi tests
 ```
 
+## Quality gate
+
+`make ci` is the single source of truth — it runs compile, format check,
+lint, mypy type-check, hygiene, and a covered test run. The coverage floor
+is set with `COVERAGE_MIN` (default `88`). Push only after `make ci` is
+green locally.
+
+```bash
+make ci                    # run the full gate
+make coverage              # just the covered test run
+make COVERAGE_MIN=90 ci    # raise the floor for a stricter local run
+```
+
 ## Branch convention
 
 Feature branches: `feature/<short-description>`. Pull requests target `main`.
