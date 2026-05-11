@@ -7,7 +7,7 @@ releases may break public API in any minor version.
 
 ## [Unreleased]
 
-## [0.11.0] - 2026-05-10
+## [0.11.0] - 2026-05-11
 
 ### Removed
 - `interpret.ExplanationEngine` and `interpret.ExplanationHypothesis`.
