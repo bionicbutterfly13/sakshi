@@ -246,7 +246,7 @@ The Witness stance: Sakshi observes the host's motivation record, validates agai
 
 Two typed protocols guard against classic failure modes; both ship with sensible default implementations and accept host-supplied replacements when richer logic is needed.
 
-`RewardIntegrityGuard` validates a goal-achievement claim against a host-supplied set of exogenous evidence keys. The default `EvidenceRequiringRewardIntegrityGuard` requires at least ``min_evidence`` keys before permitting the claim. Defends against the pattern where an agent silently records "goal achieved" without the world having moved.
+`RewardIntegrityGuard` validates a goal-achievement claim against a host-supplied set of exogenous evidence keys. The default `EvidenceRequiringRewardIntegrityGuard` counts *distinct* evidence keys and requires at least ``min_evidence`` of them before permitting the claim, so duplicate keys cannot inflate the count. Hosts can also pass ``required_evidence_keys`` to demand specific named keys (e.g., ``"tool:completed"`` and ``"state:changed"``) before any claim is permitted. Defends against the pattern where an agent silently records "goal achieved" without the world having moved.
 
 `ModificationIntegrityGuard` validates a proposed `GoalConstraint` rewrite. The default `IntegrityCriticalModificationGuard` refuses to demote a constraint flagged ``integrity_critical=True`` to non-critical and refuses to drop any of its safety constraints. This closes the Phase A → Phase F handshake on the ``integrity_critical`` flag.
 
@@ -265,6 +265,22 @@ Sakshi raises typed package exceptions from `sakshi.errors`.
 - `WorldStateUnavailableError` — host state store cannot return required state.
 
 Host adapters may translate lower-level exceptions into these errors. Package core should not leak persistence, web-framework, or host-service exception types through public APIs.
+
+## Failure visibility
+
+Two seams default to fail-open behavior (keep the cycle moving when callback or
+persistence layers misbehave) but ship a strict opt-in for hosts that want
+loud failures during integration:
+
+- `PhaseRegistry(fail_fast_callbacks=True)` — re-raises any cycle-complete
+  callback failure as `PhaseTransitionError` instead of swallowing it. Use
+  this when a callback owns persistence the rest of the system relies on.
+- `GoalMonitor(fail_closed_on_store_error=True)` — surfaces store-write
+  failures as `store_error` on the returned `GoalMonitorResult` and treats
+  the goal as not-yet-monitored, rather than silently reporting success.
+
+Both options are opt-in so the quickstart defaults stay friendly to tests
+and inert hosts.
 
 ## Observability
 
