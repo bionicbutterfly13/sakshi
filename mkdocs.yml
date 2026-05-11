@@ -45,6 +45,7 @@ nav:
   - Architecture: architecture.md
   - Principles: principles.md
   - 1.0 Stability: 1.0-stability.md
+  - Performance: performance.md
   - Quality: quality.md
   - Trusted Autonomy Audit: trusted-autonomy-audit.md
   - API Reference:

@@ -29,7 +29,14 @@ green locally.
 make ci                    # run the full gate
 make coverage              # just the covered test run
 make COVERAGE_MIN=90 ci    # raise the floor for a stricter local run
+make benchmark             # hot-path perf measurements, see docs/performance.md
 ```
+
+`make benchmark` is intentionally outside `make ci` — measurements
+vary by machine and shouldn't fail CI. Run it locally before/after
+work that touches the cycle infrastructure (blackboard, registries,
+intervention executor, goal graph). The baseline numbers Sakshi ships
+with live in [`docs/performance.md`](docs/performance.md).
 
 ## Branch convention
 

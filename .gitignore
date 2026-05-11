@@ -43,6 +43,9 @@ site/
 # graphify knowledge-graph tooling output (regenerable, not source)
 graphify-out/
 
+# pytest-benchmark per-machine runs (regenerable, platform-specific)
+.benchmarks/
+
 # Conductor local control-plane artifacts
 conductor/
 
