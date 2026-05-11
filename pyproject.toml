@@ -55,6 +55,9 @@ docs = [
     "mkdocs-material>=9.5",
     "mkdocstrings[python]>=0.26",
 ]
+llm-examples = [
+    "anthropic>=0.40",
+]
 
 [tool.setuptools]
 packages = [

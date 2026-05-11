@@ -7,6 +7,20 @@ releases may break public API in any minor version.
 
 ## [Unreleased]
 
+### Added
+- `examples/llm_research_agent/` — a second reference integration where
+  the host's cognition is an actual language model. Decomposes a research
+  question into subgoals via Sakshi's `GoalGraph`, queries the LLM for
+  each, fires a typed `AnomalyKind.LOW_CONFIDENCE` event when an answer
+  is low-confidence, reframes once and re-queries, then gates the final
+  synthesis through `WriteGuard.check`. Ships with a deterministic
+  `MockLLMClient` so tests run offline; the `AnthropicLLMClient` path
+  uses Anthropic's SDK with system-prompt caching wired. Install with
+  `pip install pysakshi[llm-examples]` for live mode.
+- New optional dependency group: `llm-examples = ["anthropic>=0.40"]`.
+  Required only for the live path of the LLM example; package core
+  remains LLM-SDK-free.
+
 ## [0.12.0] - 2026-05-11
 
 ### Added

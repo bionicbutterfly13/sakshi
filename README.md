@@ -46,12 +46,17 @@ Release process: see [`docs/release-checklist.md`](docs/release-checklist.md).
 
 ## Reference integration
 
-For a self-contained host that exercises every Sakshi seam — `PhaseRegistry`,
-`EventBus`, `GoalStateStore`, `WriteGuard` — without any LLM, network, or
-persistence backend, see
-[`examples/toy_blocks_agent/`](examples/toy_blocks_agent/README.md). It is
-the smallest concrete answer to "how do I wire Sakshi into an existing
-agent?"
+Two examples live under [`examples/`](examples/):
+
+- [`toy_blocks_agent/`](examples/toy_blocks_agent/README.md) — a stdlib-only
+  3-phase plan/act/observe loop on a tiny blocks world. The smallest
+  concrete answer to "how do I wire Sakshi into an existing agent?"
+- [`llm_research_agent/`](examples/llm_research_agent/README.md) — the
+  bigger sibling: cognition is an actual Anthropic Claude model
+  (deterministic mock available for tests). Adds dynamic `GoalGraph`
+  decomposition, typed low-confidence anomaly recovery, and a
+  `WriteGuard`-gated publish step. Install with the `llm-examples`
+  extra to enable the live path: `pip install pysakshi[llm-examples]`.
 
 ## What it is
 
