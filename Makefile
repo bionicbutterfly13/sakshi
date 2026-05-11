@@ -16,13 +16,13 @@ docs-build:
 	$(PYTHON) -m mkdocs build --strict
 
 fmt:
-	$(PYTHON) -m ruff format sakshi tests
+	$(PYTHON) -m ruff format sakshi tests examples
 
 fmt-check:
-	$(PYTHON) -m ruff format --check sakshi tests
+	$(PYTHON) -m ruff format --check sakshi tests examples
 
 lint:
-	$(PYTHON) -m ruff check sakshi tests
+	$(PYTHON) -m ruff check sakshi tests examples
 
 typecheck:
 	$(PYTHON) -m mypy sakshi

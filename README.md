@@ -41,6 +41,15 @@ pip install git+https://github.com/bionicbutterfly13/sakshi
 
 Release process: see [`docs/release-checklist.md`](docs/release-checklist.md).
 
+## Reference integration
+
+For a self-contained host that exercises every Sakshi seam — `PhaseRegistry`,
+`EventBus`, `GoalStateStore`, `WriteGuard` — without any LLM, network, or
+persistence backend, see
+[`examples/toy_blocks_agent/`](examples/toy_blocks_agent/README.md). It is
+the smallest concrete answer to "how do I wire Sakshi into an existing
+agent?"
+
 ## What it is
 
 The Witness pattern means the host keeps control of cognition while Sakshi

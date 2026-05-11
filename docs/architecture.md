@@ -289,3 +289,12 @@ Core modules use named Python loggers and high-signal structured message text. E
 ## Construction
 
 Sakshi package code does not ship singleton getters. Hosts construct runtime objects and pass configured protocol implementations. This keeps lifecycle, caching, and dependency ownership outside the library.
+
+## Reference integration
+
+`examples/toy_blocks_agent/` is a self-contained host that exercises every seam
+described here — `PhaseRegistry`, `EventBus`, `GoalStateStore`, `WriteGuard` —
+without any LLM, network, or persistence backend. Read it as the smallest
+concrete answer to "how do I wire Sakshi into an existing agent?" The
+`adapters.py` file shows three reference protocol adapters; replace each one
+with your host's real implementation while keeping the seam contracts.
