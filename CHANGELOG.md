@@ -7,6 +7,31 @@ releases may break public API in any minor version.
 
 ## [Unreleased]
 
+### Added
+- `examples/toy_blocks_agent/` — a self-contained reference integration
+  (no LLM, no network) that exercises every public Sakshi seam:
+  `PhaseRegistry`, `EventBus`, `GoalStateStore`, `WriteGuard`. Three
+  reference protocol adapters plus a 3-phase plan/act/observe loop on a
+  tiny blocks-world. Smoke tests pin the end-to-end run so the example
+  cannot rot when the seams evolve.
+- Documentation guidance: `docs/architecture.md` "Failure visibility"
+  section documenting `PhaseRegistry(fail_fast_callbacks=True)` and
+  `GoalMonitor(fail_closed_on_store_error=True)`; reward-guard
+  paragraph updated to mention `required_evidence_keys` (named-key
+  requirement). README and architecture docs now point at the
+  deny-by-default safe seams (`DenyByDefaultWriteGuard`,
+  `DenyByDefaultPolicy`) for production scaffolds.
+
+### Changed
+- `make ci` now runs `mypy sakshi` and `pytest --cov=sakshi
+  --cov-fail-under=88` (baseline 90%). Local override:
+  `make COVERAGE_MIN=90 ci`. Coverage drops in PRs now fail the gate
+  the same way type drift does.
+- `pyproject.toml` dev extra gains `mypy>=1.8` and `pytest-cov>=4.1`.
+- `make fmt` / `lint` / `coverage` paths extended to include
+  `examples/` so the reference integration is gated alongside the
+  package.
+
 ## [0.11.0] - 2026-05-11
 
 ### Removed
