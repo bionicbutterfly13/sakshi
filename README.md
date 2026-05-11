@@ -42,6 +42,7 @@ pip install git+https://github.com/bionicbutterfly13/sakshi
 ```
 
 Release process: see [`docs/release-checklist.md`](docs/release-checklist.md).
+1.0 stability commitment: see [`docs/1.0-stability.md`](docs/1.0-stability.md).
 
 ## Reference integration
 

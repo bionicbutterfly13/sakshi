@@ -7,7 +7,16 @@ releases may break public API in any minor version.
 
 ## [Unreleased]
 
+## [0.12.0] - 2026-05-11
+
 ### Added
+- `docs/1.0-stability.md` — explicit pre-1.0 stability commitment.
+  Declares that every symbol in `sakshi.__all__` will follow SemVer
+  once 1.0 ships, that breaking changes require a `DeprecationWarning`
+  in at least one prior minor, and that protocol contracts stay stable
+  across the `1.x` series. Classifies the current public surface as
+  STABLE vs PROVISIONAL for informational pinning guidance. Linked
+  from README and the published docs site.
 - `examples/toy_blocks_agent/` — a self-contained reference integration
   (no LLM, no network) that exercises every public Sakshi seam:
   `PhaseRegistry`, `EventBus`, `GoalStateStore`, `WriteGuard`. Three
