@@ -143,9 +143,14 @@ audit record of every permit or deny decision. The executor:
 4. Accepts an `InterventionOutcome` callback so downstream effectiveness can be reported.
 
 The default `AlwaysPermitPolicy` is test-friendly; production hosts inject their
-own policy. `MetaCycleResult.actions` contains only permitted/published actions,
-while `MetaCycleResult.intervention_records` exposes the full decision trail.
-The audit history is the seam human reviewers and post-hoc analysis tools read.
+own policy. Hosts that have not yet completed their policy can use
+`DenyByDefaultPolicy` as a safe scaffold — it denies every intervention with an
+explicit audit reason instead of silently permitting them. The same shape exists
+on the write seam: `AlwaysPermitWriteGuard` is the permissive default,
+`DenyByDefaultWriteGuard` is the deny-first alternative. `MetaCycleResult.actions`
+contains only permitted/published actions, while
+`MetaCycleResult.intervention_records` exposes the full decision trail. The
+audit history is the seam human reviewers and post-hoc analysis tools read.
 
 ## Confidence calibration
 
