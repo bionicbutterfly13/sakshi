@@ -36,6 +36,7 @@ dependencies = [
 
 [project.urls]
 Homepage = "https://github.com/bionicbutterfly13/sakshi"
+Documentation = "https://bionicbutterfly13.github.io/sakshi/"
 Source = "https://github.com/bionicbutterfly13/sakshi"
 Issues = "https://github.com/bionicbutterfly13/sakshi/issues"
 Changelog = "https://github.com/bionicbutterfly13/sakshi/blob/main/CHANGELOG.md"
