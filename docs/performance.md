@@ -38,10 +38,43 @@ they're the ones worth gating against regression.
 | `toy_blocks_agent` end-to-end (4 cycles) | ~345 µs | Full integration: Sakshi seam overhead + a real host loop reaching its goal. |
 | `GoalGraph.add_goal` chain (50 deep) | ~545 µs | Adding a 50-deep parent→child chain. |
 
+## In context
+
+The numbers above are micro-benchmarks. Reading them on their own is
+hard — is 120 µs per cycle "fast"? It depends on what else the agent
+is doing. The honest framing:
+
+| Operation | Typical latency | Sakshi cycle as % of this |
+|---|---|---|
+| Claude Opus call (uncached, 500 tokens out) | 1.5–4.0 s | ~0.003% |
+| Claude Sonnet call (uncached, 500 tokens out) | 0.5–1.5 s | ~0.01% |
+| Claude Haiku call (uncached, 500 tokens out) | 0.15–0.4 s | ~0.05% |
+| Prompt-cache hit (first token) | <0.1 s | ~0.12% |
+| HTTP tool call (round trip, same region) | 50–200 ms | ~0.1% |
+| Local Postgres read | 1–20 ms | ~1% |
+| Local filesystem read (cached) | 0.05–0.5 ms | ~30–200% |
+| **Sakshi full cycle** | **0.12 ms** | — |
+| Sakshi intervention validate | 0.02 ms | — |
+
+What this says:
+
+- For any agent whose cognition includes **at least one LLM call per
+  cycle**, Sakshi's overhead is in the noise floor. The agent's
+  wall-clock dominated by the model.
+- For agents whose cycle is **only** Python (e.g., a rule-based
+  controller, the `toy_blocks_agent` example), Sakshi is the
+  expensive part — but the absolute cost is still ~0.1 ms, which is
+  the same magnitude as a single filesystem read. A real loop will
+  trivially run thousands of cycles per second.
+- The intervention validate path (~21 µs) is the fastest seam. If
+  your meta-loop fires interventions on every cycle, the audit
+  layer is not what slows you down.
+
 ## Read this as
 
 - A typical Sakshi cycle costs roughly **0.1 ms** end-to-end. Hosts
-  with millisecond-scale agents pay <1% overhead.
+  with millisecond-scale agents pay <1% overhead; hosts running
+  LLM-dominated cycles pay rounding error.
 - Hot paths that touch async locks (blackboard, snapshot) are
   10–100× faster than the full cycle, so swapping them under load is
   not a bottleneck.

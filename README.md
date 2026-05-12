@@ -6,6 +6,9 @@ A metacognitive runtime for Python agents: the Witness pattern. A watching proce
 
 **Docs:** <https://bionicbutterfly13.github.io/sakshi/>
 
+**Where Sakshi fits** (vs LangGraph, AutoGen, raw event loops): see
+[`docs/positioning.md`](docs/positioning.md).
+
 ## Status
 
 **0.11.0 pre-1.0.** The typed Witness surface is present and package-local tests cover the main DTO, goal, plan, interpret, meta, motivation, trust, uncertainty, and guard primitives. The public API may still change in 0.x minor releases; production hosts must verify their adapters before relying on a new minor version.
