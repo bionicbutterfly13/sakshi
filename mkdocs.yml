@@ -29,13 +29,14 @@ plugins:
             show_if_no_docstring: true
             show_root_heading: true
             show_signature_annotations: true
-            show_source: true
+            show_source: false
 
 markdown_extensions:
   - admonition
   - attr_list
   - pymdownx.details
-  - pymdownx.highlight
+  - pymdownx.highlight:
+      use_pygments: false
   - pymdownx.superfences
   - toc:
       permalink: true

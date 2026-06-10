@@ -7,6 +7,8 @@ releases may break public API in any minor version.
 
 ## [Unreleased]
 
+## [0.14.0] - 2026-05-19
+
 ### Added
 - `examples/llm_research_agent/` — a second reference integration where
   the host's cognition is an actual language model. Decomposes a research
