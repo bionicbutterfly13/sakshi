@@ -115,9 +115,21 @@ from sakshi.protocols import (
     NoOpEventBus,
     WriteGuard,
 )
+from sakshi.recovery import (
+    RECOVERY_STRATEGIES,
+    FailureType,
+    RecoveryAction,
+    RecoveryStrategy,
+    StrategyHinter,
+    get_strategies_for_failure,
+    hint_for_empty_results,
+    hint_for_parse_error,
+    hint_for_timeout,
+    wrap_with_resilience,
+)
 from sakshi.registries import PhaseRegistry
 
-__version__ = "0.12.0"
+__version__ = "0.14.0"
 
 __all__ = [
     "AcceptingRebelHook",
@@ -151,6 +163,7 @@ __all__ = [
     "EvidenceRequiringRewardIntegrityGuard",
     "ExpectationProfile",
     "FailureMode",
+    "FailureType",
     "GoalConstraint",
     "GoalEvent",
     "GoalEventType",
@@ -189,10 +202,13 @@ __all__ = [
     "PlanRiskAssessment",
     "PlanSoundnessError",
     "ProjectionTransparency",
+    "RECOVERY_STRATEGIES",
     "ReasoningTransparency",
     "RebelDecision",
     "RebelHook",
     "RebelVerdict",
+    "RecoveryAction",
+    "RecoveryStrategy",
     "ResolutionLevel",
     "RewardIntegrityGuard",
     "RiskBand",
@@ -201,6 +217,7 @@ __all__ = [
     "SchedulingDecision",
     "SinceAnomalyPruner",
     "StatusTransparency",
+    "StrategyHinter",
     "TRAPDimension",
     "TRAPRouter",
     "TaskDecomposer",
@@ -221,5 +238,10 @@ __all__ = [
     "biases_toward_exploration",
     "classify_failure_mode",
     "evaluate_envelope",
+    "get_strategies_for_failure",
+    "hint_for_empty_results",
+    "hint_for_parse_error",
+    "hint_for_timeout",
     "make_audit_record",
+    "wrap_with_resilience",
 ]

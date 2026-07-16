@@ -64,6 +64,7 @@ nav:
       - Registries: api/registries.md
       - Intake: api/intake.md
       - World: api/world.md
+      - Recovery: api/recovery.md
       - Errors: api/errors.md
       - Config: api/config.md
   - Release Checklist: release-checklist.md

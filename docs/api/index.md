@@ -19,5 +19,6 @@ Use the package pages when you want a quick orientation by subsystem. Use
 - [Registries](registries.md)
 - [Intake](intake.md)
 - [World](world.md)
+- [Recovery](recovery.md)
 - [Errors](errors.md)
 - [Config](config.md)

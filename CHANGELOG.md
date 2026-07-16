@@ -8,12 +8,17 @@ releases may break public API in any minor version.
 ## [Unreleased]
 
 ### Added
+- `sakshi.recovery`: typed operational failure classification and bounded
+  recovery hints with host-owned attempt tracking and strategy registration.
 - Official GitHub Spec Kit project workflow under `.specify/`, generated Codex
   skills under `.agents/skills/`, and active feature records under `specs/`.
 
 ### Changed
 - Historical planning and internal disclosure artifacts now live under the
   ignored `.archive/` tree, which is also excluded from Graphify indexing.
+
+### Fixed
+- Package `__version__` now matches the `0.14.0` project metadata.
 
 ## [0.14.0] - 2026-05-19
 
