@@ -69,6 +69,7 @@ packages = [
     "sakshi.plans",
     "sakshi.meta",
     "sakshi.interpret",
+    "sakshi.recovery",
     "sakshi.registries",
     "sakshi.intake",
     "sakshi.world",

@@ -211,6 +211,24 @@ Returns a frozen `PlanRiskAssessment`. Slots into the EVAL phase before commit.
 
 `classify_failure_mode` tags a `FailureMode` along the four-axis TRAP taxonomy (Transparency, Reasoning, Adaptation, Perception). Resolution order: explicit override argument, `trap:<axis>` marker in the description, deterministic keyword match against name + description. `TRAPRouter` then maps each axis to a recommended `ControlActionType` (Reasoning → `SWAP_MODULE`, Perception → `STRENGTHEN_MODULE`, Adaptation → `ADJUST_PRECISION`, Transparency → `SUPPRESS_MODULE`); host-supplied routing overrides defaults.
 
+## Operational recovery hints
+
+`StrategyHinter` maps concrete runtime failures such as timeouts, empty results,
+parse errors, and bridge failures to bounded `RecoveryAction` hints. This layer
+does not execute retries or tool calls. The host owns each `StrategyHinter`
+instance, including attempt state and custom strategy registration, so package
+code has no process-wide recovery singleton.
+
+The default `RECOVERY_STRATEGIES` mapping is immutable. Hosts can copy those
+defaults into an instance, register local strategies, inspect the next action
+without consuming it, and reset attempt state for a completed task. A hinter
+bounds retained task state and evicts the least recently used task when the
+configured limit is reached. Convenience functions are stateless unless the
+host passes its own hinter; this keeps lifecycle and cross-call escalation under
+host control. This operational taxonomy is separate from TRAP: TRAP classifies
+declared cognitive failure modes, while recovery recommends a next step for a
+runtime failure already observed by the host.
+
 ## Competing-hypothesis distribution
 
 `AnomalyExplainer.explain_distribution(event, top_k=3)` returns up to ``top_k`` ranked `AnomalyExplanation` records instead of collapsing to a single best guess. Hosts read the distribution and decide whether the top-1 confidence exceeds the runner-up by enough margin to justify a high-impact intervention; otherwise they defer or gather more evidence.

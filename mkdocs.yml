@@ -45,6 +45,7 @@ nav:
   - Home: index.md
   - Architecture: architecture.md
   - Principles: principles.md
+  - Spec-Driven Development: spec-driven-development.md
   - Where Sakshi fits: positioning.md
   - 1.0 Stability: 1.0-stability.md
   - Performance: performance.md
@@ -63,6 +64,7 @@ nav:
       - Registries: api/registries.md
       - Intake: api/intake.md
       - World: api/world.md
+      - Recovery: api/recovery.md
       - Errors: api/errors.md
       - Config: api/config.md
   - Release Checklist: release-checklist.md

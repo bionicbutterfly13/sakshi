@@ -42,6 +42,17 @@ with live in [`docs/performance.md`](docs/performance.md).
 
 Feature branches: `feature/<short-description>`. Pull requests target `main`.
 
+## Planning workflow
+
+New staged features, bugs, and release work use GitHub Spec Kit. Start with the
+project constitution in [`.specify/memory/constitution.md`](.specify/memory/constitution.md),
+then create new work under [`specs/`](specs/). Ignored legacy planning artifacts
+are historical records and are not active planning state.
+
+Codex users invoke the generated skills as `$speckit-constitution`,
+`$speckit-specify`, `$speckit-plan`, `$speckit-tasks`, and
+`$speckit-implement`.
+
 ## Public API discipline
 
 Sakshi exposes protocols, DTOs, and pure-core logic. The public package never imports from a specific runtime, persistence layer, web framework, or LLM SDK. Host applications wire concrete implementations behind the documented protocols.
