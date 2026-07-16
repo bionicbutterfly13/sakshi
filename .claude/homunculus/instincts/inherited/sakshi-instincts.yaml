@@ -1,0 +1,436 @@
+# Instincts generated from https://github.com/bionicbutterfly13/sakshi
+# Generated: 2026-07-16T17:19:17.111Z
+# Version: 2.0
+# NOTE: This file supplements (does not replace) any existing curated instincts.
+# High-confidence manually curated instincts should be preserved alongside these.
+
+---
+id: sakshi-commit-conventional
+trigger: "when writing a commit message"
+confidence: 0.85
+domain: git
+source: repo-analysis
+source_repo: https://github.com/bionicbutterfly13/sakshi
+---
+
+# Sakshi Commit Conventional
+
+## Action
+
+Use conventional commit format with prefixes: chore, feat, fix
+
+## Evidence
+
+- 3 commits analyzed
+- Detected conventional commit pattern
+- Examples: chore: adopt Spec Kit workflow, feat: add host-owned recovery hinting
+
+---
+id: sakshi-commit-length
+trigger: "when writing a commit message"
+confidence: 0.6
+domain: git
+source: repo-analysis
+source_repo: https://github.com/bionicbutterfly13/sakshi
+---
+
+# Sakshi Commit Length
+
+## Action
+
+Keep commit messages concise (~34 characters)
+
+## Evidence
+
+- Average commit message length: 34 chars
+- Based on 3 commits
+
+---
+id: sakshi-naming-files
+trigger: "when creating a new file"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/bionicbutterfly13/sakshi
+---
+
+# Sakshi Naming Files
+
+## Action
+
+Use camelCase naming convention
+
+## Evidence
+
+- Analyzed file naming patterns in repository
+- Dominant pattern: camelCase
+
+---
+id: sakshi-import-relative
+trigger: "when importing modules"
+confidence: 0.75
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/bionicbutterfly13/sakshi
+---
+
+# Sakshi Import Relative
+
+## Action
+
+Use relative imports for project files
+
+## Evidence
+
+- Import analysis shows relative import pattern
+- Example: import { x } from '../lib/x'
+
+---
+id: sakshi-export-style
+trigger: "when exporting from a module"
+confidence: 0.7
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/bionicbutterfly13/sakshi
+---
+
+# Sakshi Export Style
+
+## Action
+
+Prefer named exports
+
+## Evidence
+
+- Export pattern analysis
+- Dominant style: named
+
+---
+id: sakshi-test-separate
+trigger: "when writing tests"
+confidence: 0.8
+domain: testing
+source: repo-analysis
+source_repo: https://github.com/bionicbutterfly13/sakshi
+---
+
+# Sakshi Test Separate
+
+## Action
+
+Place tests in the tests/ or __tests__/ directory, mirroring src structure
+
+## Evidence
+
+- Separate test directory pattern detected
+- Tests live in dedicated test folders
+
+---
+id: sakshi-workflow-feature-implementation-with-docs-and-tests
+trigger: "when doing feature implementation with docs and tests"
+confidence: 0.6
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/bionicbutterfly13/sakshi
+---
+
+# Sakshi Workflow Feature Implementation With Docs And Tests
+
+## Action
+
+Follow the feature-implementation-with-docs-and-tests workflow:
+1. Update or create implementation code in sakshi/ (e.g., sakshi/recovery/hinting.py)
+2. Update or create corresponding __init__.py files if needed
+3. Update or create documentation in docs/api/ and docs/architecture.md
+4. Update CHANGELOG.md
+5. Update mkdocs.yml if new docs are added
+6. Update or create tests in tests/unit/
+7. Update pyproject.toml or uv.lock if dependencies change
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~2x per month
+- Files: sakshi/**/*.py, docs/api/*.md, docs/architecture.md
+
+---
+id: sakshi-workflow-bugfix-with-docs-and-tests
+trigger: "when doing bugfix with docs and tests"
+confidence: 0.6
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/bionicbutterfly13/sakshi
+---
+
+# Sakshi Workflow Bugfix With Docs And Tests
+
+## Action
+
+Follow the bugfix-with-docs-and-tests workflow:
+1. Modify implementation code in sakshi/ (e.g., sakshi/recovery/hinting.py)
+2. Update documentation in docs/api/ and docs/architecture.md if necessary
+3. Update CHANGELOG.md
+4. Update or add tests in tests/unit/
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~2x per month
+- Files: sakshi/**/*.py, docs/api/*.md, docs/architecture.md
+
+---
+id: sakshi-instinct-file-naming-camelCase
+trigger: "When creating or renaming a Python file in the repository"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: bionicbutterfly13/sakshi
+---
+
+# Sakshi Instinct File Naming CamelCase
+
+## Action
+
+Name the file using camelCase (e.g., recoveryHinting.py)
+
+## Evidence
+
+- Pattern in namingConventions.files
+- Observed in sakshi/ folder structure
+
+---
+id: sakshi-instinct-function-naming-camelCase
+trigger: "When defining a new function"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: bionicbutterfly13/sakshi
+---
+
+# Sakshi Instinct Function Naming CamelCase
+
+## Action
+
+Name the function using camelCase (e.g., getRecoveryHint)
+
+## Evidence
+
+- Pattern in namingConventions.functions
+
+---
+id: sakshi-instinct-class-naming-pascalCase
+trigger: "When defining a new class"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: bionicbutterfly13/sakshi
+---
+
+# Sakshi Instinct Class Naming PascalCase
+
+## Action
+
+Name the class using PascalCase (e.g., RecoveryManager)
+
+## Evidence
+
+- Pattern in namingConventions.classes
+
+---
+id: sakshi-instinct-constant-naming-screaming-snake-case
+trigger: "When defining a constant"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: bionicbutterfly13/sakshi
+---
+
+# Sakshi Instinct Constant Naming Screaming Snake Case
+
+## Action
+
+Name the constant using SCREAMING_SNAKE_CASE (e.g., MAX_RETRIES)
+
+## Evidence
+
+- Pattern in namingConventions.constants
+
+---
+id: sakshi-instinct-imports-relative
+trigger: "When importing modules within the sakshi package"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: bionicbutterfly13/sakshi
+---
+
+# Sakshi Instinct Imports Relative
+
+## Action
+
+Use relative imports (e.g., from .module import X)
+
+## Evidence
+
+- Pattern in importStyle
+- Seen in sakshi/**/*.py
+
+---
+id: sakshi-instinct-exports-named
+trigger: "When exporting functions or classes from a module"
+confidence: 0.7
+domain: code-style
+source: repo-analysis
+source_repo: bionicbutterfly13/sakshi
+---
+
+# Sakshi Instinct Exports Named
+
+## Action
+
+Use named exports (explicitly list exports in __all__)
+
+## Evidence
+
+- Pattern in exportStyle
+
+---
+id: sakshi-instinct-test-location-separate
+trigger: "When adding or updating tests"
+confidence: 0.9
+domain: testing
+source: repo-analysis
+source_repo: bionicbutterfly13/sakshi
+---
+
+# Sakshi Instinct Test Location Separate
+
+## Action
+
+Place test files in the tests/unit/ directory, separate from implementation code
+
+## Evidence
+
+- Pattern in architecture.folderStructure.testLocation
+- Seen in workflow filesInvolved
+
+---
+id: sakshi-instinct-test-file-naming
+trigger: "When creating a new test file"
+confidence: 0.7
+domain: testing
+source: repo-analysis
+source_repo: bionicbutterfly13/sakshi
+---
+
+# Sakshi Instinct Test File Naming
+
+## Action
+
+Name the test file using camelCase and .py extension (e.g., testRecoveryHinting.py)
+
+## Evidence
+
+- Pattern in namingConventions.files
+- tests/unit/*.py
+
+---
+id: sakshi-instinct-test-update-on-feature-or-bugfix
+trigger: "When implementing a new feature or fixing a bug"
+confidence: 0.9
+domain: testing
+source: repo-analysis
+source_repo: bionicbutterfly13/sakshi
+---
+
+# Sakshi Instinct Test Update On Feature Or Bugfix
+
+## Action
+
+Update or create corresponding unit tests in tests/unit/
+
+## Evidence
+
+- Seen in workflow commitSequence
+- filesInvolved in both workflows
+
+---
+id: sakshi-instinct-git-conventional-commits
+trigger: "When writing a commit message"
+confidence: 0.9
+domain: git
+source: repo-analysis
+source_repo: bionicbutterfly13/sakshi
+---
+
+# Sakshi Instinct Git Conventional Commits
+
+## Action
+
+Use conventional commit prefixes: chore, feat, or fix (e.g., feat: add X)
+
+## Evidence
+
+- Pattern in commits.prefixes
+- Examples in commits.examples
+
+---
+id: sakshi-instinct-git-commit-length
+trigger: "When composing a commit message"
+confidence: 0.7
+domain: git
+source: repo-analysis
+source_repo: bionicbutterfly13/sakshi
+---
+
+# Sakshi Instinct Git Commit Length
+
+## Action
+
+Keep the commit message concise, around 34 characters on average
+
+## Evidence
+
+- Pattern in commits.averageLength
+- Examples in commits.examples
+
+---
+id: sakshi-instinct-feature-workflow
+trigger: "When someone wants to add a new feature or significant capability"
+confidence: 0.9
+domain: workflow
+source: repo-analysis
+source_repo: bionicbutterfly13/sakshi
+---
+
+# Sakshi Instinct Feature Workflow
+
+## Action
+
+Follow the 'feature-implementation-with-docs-and-tests' workflow: update/create implementation code, __init__.py, docs, CHANGELOG.md, mkdocs.yml, tests, and dependencies as needed
+
+## Evidence
+
+- Workflow: feature-implementation-with-docs-and-tests
+- Seen in commit sequences and files involved
+
+---
+id: sakshi-instinct-bugfix-workflow
+trigger: "When someone wants to fix a bug in an existing feature"
+confidence: 0.85
+domain: workflow
+source: repo-analysis
+source_repo: bionicbutterfly13/sakshi
+---
+
+# Sakshi Instinct Bugfix Workflow
+
+## Action
+
+Follow the 'bugfix-with-docs-and-tests' workflow: modify implementation code, update docs if necessary, update CHANGELOG.md, and update/add tests
+
+## Evidence
+
+- Workflow: bugfix-with-docs-and-tests
+- Seen in commit sequences and files involved
+
