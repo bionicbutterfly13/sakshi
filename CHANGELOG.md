@@ -7,6 +7,14 @@ releases may break public API in any minor version.
 
 ## [Unreleased]
 
+### Added
+- Official GitHub Spec Kit project workflow under `.specify/`, generated Codex
+  skills under `.agents/skills/`, and active feature records under `specs/`.
+
+### Changed
+- Historical planning and internal disclosure artifacts now live under the
+  ignored `.archive/` tree, which is also excluded from Graphify indexing.
+
 ## [0.14.0] - 2026-05-19
 
 ### Added

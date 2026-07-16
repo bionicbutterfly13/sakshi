@@ -45,6 +45,7 @@ nav:
   - Home: index.md
   - Architecture: architecture.md
   - Principles: principles.md
+  - Spec-Driven Development: spec-driven-development.md
   - Where Sakshi fits: positioning.md
   - 1.0 Stability: 1.0-stability.md
   - Performance: performance.md

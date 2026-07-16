@@ -11,8 +11,6 @@ cypher.txt
 archive/
 archives/
 .archives/
-conductor/archive/
-conductor/archives/
 .archive/
 
 # Agent/workflow generated state and logs

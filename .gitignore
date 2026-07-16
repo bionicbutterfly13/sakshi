@@ -46,8 +46,8 @@ graphify-out/
 # pytest-benchmark per-machine runs (regenerable, platform-specific)
 .benchmarks/
 
-# Conductor local control-plane artifacts
-conductor/
+# Historical project artifacts (read-only, excluded from agent context)
+.archive/
 
 # Serena MCP cache (IDE-only, regenerable)
 .serena/
