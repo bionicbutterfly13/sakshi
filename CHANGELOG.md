@@ -9,7 +9,9 @@ releases may break public API in any minor version.
 
 ### Added
 - `sakshi.recovery`: typed operational failure classification and bounded
-  recovery hints with host-owned attempt tracking and strategy registration.
+  recovery hints with host-owned, size-limited attempt tracking and strategy
+  registration. Convenience helpers are explicitly stateless unless supplied
+  with a host-owned hinter.
 - Official GitHub Spec Kit project workflow under `.specify/`, generated Codex
   skills under `.agents/skills/`, and active feature records under `specs/`.
 

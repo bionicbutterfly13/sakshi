@@ -130,6 +130,20 @@ class TestStrategyHinter:
         assert "exhausted" in hint.lower()
         assert "host" in hint.lower()
 
+    def test_task_state_is_bounded_and_evicts_oldest(self) -> None:
+        hinter = StrategyHinter(max_tracked_tasks=2)
+
+        hinter.get_hint(FailureType.EMPTY_RESULTS, task_id="oldest")
+        hinter.get_hint(FailureType.EMPTY_RESULTS, task_id="newer")
+        hinter.get_hint(FailureType.EMPTY_RESULTS, task_id="newest")
+
+        hint = hinter.get_hint(FailureType.EMPTY_RESULTS, task_id="oldest")
+        assert "BROADEN_QUERY" in hint
+
+    def test_rejects_invalid_task_bound(self) -> None:
+        with pytest.raises(ValueError, match="max_tracked_tasks"):
+            StrategyHinter(max_tracked_tasks=0)
+
 
 class TestGetStrategyAction:
     """Tests for non-consuming action inspection."""
@@ -222,6 +236,15 @@ class TestConvenienceFunctions:
 
         assert "BROADEN_QUERY" in first
         assert "FALLBACK_TOOL" in second
+
+    def test_convenience_functions_are_stateless_without_hinter(self) -> None:
+        task_id = "test-conv-stateless"
+
+        first = hint_for_empty_results(task_id=task_id)
+        second = hint_for_empty_results(task_id=task_id)
+
+        assert "BROADEN_QUERY" in first
+        assert "BROADEN_QUERY" in second
 
 
 class TestRecoveryStrategyRegistry:

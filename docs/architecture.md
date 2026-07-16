@@ -221,10 +221,13 @@ code has no process-wide recovery singleton.
 
 The default `RECOVERY_STRATEGIES` mapping is immutable. Hosts can copy those
 defaults into an instance, register local strategies, inspect the next action
-without consuming it, and reset attempt state for a completed task. This
-operational taxonomy is separate from TRAP: TRAP classifies declared cognitive
-failure modes, while recovery recommends a next step for a runtime failure
-already observed by the host.
+without consuming it, and reset attempt state for a completed task. A hinter
+bounds retained task state and evicts the least recently used task when the
+configured limit is reached. Convenience functions are stateless unless the
+host passes its own hinter; this keeps lifecycle and cross-call escalation under
+host control. This operational taxonomy is separate from TRAP: TRAP classifies
+declared cognitive failure modes, while recovery recommends a next step for a
+runtime failure already observed by the host.
 
 ## Competing-hypothesis distribution
 

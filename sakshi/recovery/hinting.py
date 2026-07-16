@@ -13,6 +13,7 @@ with a runtime failure in hand.
 from __future__ import annotations
 
 import logging
+from collections import OrderedDict
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
 from enum import StrEnum
@@ -200,12 +201,34 @@ class StrategyHinter:
     def __init__(
         self,
         strategies: Mapping[FailureType, Sequence[RecoveryStrategy]] | None = None,
+        *,
+        max_tracked_tasks: int = 1024,
     ) -> None:
+        if max_tracked_tasks < 1:
+            raise ValueError("max_tracked_tasks must be at least 1")
         source = RECOVERY_STRATEGIES if strategies is None else strategies
         self._strategies = {
             failure_type: list(items) for failure_type, items in source.items()
         }
+        self._max_tracked_tasks = max_tracked_tasks
+        self._tracked_tasks: OrderedDict[str, None] = OrderedDict()
         self._attempt_counts: dict[tuple[str, FailureType, int], int] = {}
+
+    def _touch_task(self, task_id: str, *, create: bool) -> None:
+        if task_id in self._tracked_tasks:
+            self._tracked_tasks.move_to_end(task_id)
+            return
+        if not create:
+            return
+        if len(self._tracked_tasks) >= self._max_tracked_tasks:
+            oldest_task_id, _ = self._tracked_tasks.popitem(last=False)
+            self._drop_attempts(oldest_task_id)
+        self._tracked_tasks[task_id] = None
+
+    def _drop_attempts(self, task_id: str) -> None:
+        keys_to_remove = [key for key in self._attempt_counts if key[0] == task_id]
+        for key in keys_to_remove:
+            del self._attempt_counts[key]
 
     def register_strategy(self, strategy: RecoveryStrategy) -> None:
         """Register a strategy on this hinter instance."""
@@ -260,6 +283,7 @@ class StrategyHinter:
             if isinstance(error_or_type, str)
             else error_or_type
         )
+        self._touch_task(task_id, create=True)
 
         for strategy in self.get_strategies(failure_type):
             attempt_key = (task_id, failure_type, id(strategy))
@@ -306,9 +330,8 @@ class StrategyHinter:
 
     def reset_attempts(self, task_id: str = "default") -> None:
         """Reset all attempt counts associated with one host task."""
-        keys_to_remove = [key for key in self._attempt_counts if key[0] == task_id]
-        for key in keys_to_remove:
-            del self._attempt_counts[key]
+        self._drop_attempts(task_id)
+        self._tracked_tasks.pop(task_id, None)
 
     def get_strategy_action(
         self,
@@ -316,6 +339,7 @@ class StrategyHinter:
         task_id: str = "default",
     ) -> RecoveryAction:
         """Return the next action without consuming an attempt."""
+        self._touch_task(task_id, create=False)
         for strategy in self.get_strategies(failure_type):
             attempt_key = (task_id, failure_type, id(strategy))
             if self._attempt_counts.get(attempt_key, 0) < strategy.max_attempts:
@@ -339,7 +363,12 @@ def wrap_with_resilience(
     *,
     hinter: StrategyHinter | None = None,
 ) -> Any:
-    """Append a recovery hint when a tool observation looks like a failure."""
+    """Append a recovery hint when a tool observation looks like a failure.
+
+    Without ``hinter``, each call is intentionally stateless. Pass a host-owned
+    ``StrategyHinter`` when repeated observations should advance through the
+    configured strategy budgets.
+    """
     obs_str = str(observation)
     if not any(pattern in obs_str.lower() for pattern in _ERROR_PATTERNS):
         return observation
@@ -355,7 +384,7 @@ def hint_for_timeout(
     *,
     hinter: StrategyHinter | None = None,
 ) -> str:
-    """Return a timeout recovery hint."""
+    """Return a timeout recovery hint, stateless unless ``hinter`` is supplied."""
     active_hinter = StrategyHinter() if hinter is None else hinter
     return active_hinter.get_hint(FailureType.TIMEOUT, context, task_id)
 
@@ -366,7 +395,7 @@ def hint_for_empty_results(
     *,
     hinter: StrategyHinter | None = None,
 ) -> str:
-    """Return an empty-results recovery hint."""
+    """Return an empty-results hint, stateless unless ``hinter`` is supplied."""
     active_hinter = StrategyHinter() if hinter is None else hinter
     return active_hinter.get_hint(FailureType.EMPTY_RESULTS, context, task_id)
 
@@ -377,7 +406,7 @@ def hint_for_parse_error(
     *,
     hinter: StrategyHinter | None = None,
 ) -> str:
-    """Return a parse-error recovery hint."""
+    """Return a parse-error hint, stateless unless ``hinter`` is supplied."""
     active_hinter = StrategyHinter() if hinter is None else hinter
     return active_hinter.get_hint(FailureType.PARSE_ERROR, context, task_id)
 
